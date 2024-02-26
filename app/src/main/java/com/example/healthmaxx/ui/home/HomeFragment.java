@@ -11,14 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.healthmaxx.R;
 import com.example.healthmaxx.databinding.FragmentHomeBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    boolean toggle = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
