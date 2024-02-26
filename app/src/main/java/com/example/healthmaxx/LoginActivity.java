@@ -1,29 +1,22 @@
 package com.example.healthmaxx;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.example.healthmaxx.databinding.ActivityMainBinding;
+import android.os.Bundle;
+
+import com.example.healthmaxx.Login.RegisterFragment;
 
 public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
 
-        Button submitBtn = findViewById(R.id.button);
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LoginActivity.this,"Login Submit", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        // Example for replacing with RegisterFragment
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, new RegisterFragment());
+        transaction.commit();
     }
 }

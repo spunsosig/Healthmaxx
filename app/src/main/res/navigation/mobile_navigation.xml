@@ -27,4 +27,12 @@
         android:name="com.example.healthmaxx.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/loginFragment3"
+        android:name="com.example.healthmaxx.Login.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/registerFragment2"
+        android:name="com.example.healthmaxx.Login.RegisterFragment"
+        android:label="RegisterFragment" />
 </navigation>
