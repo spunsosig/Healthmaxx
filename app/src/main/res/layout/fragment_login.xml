@@ -9,6 +9,7 @@
     android:id="@+id/loginFragmentContainer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="302dp"
         android:layout_height="413dp"
         android:background="@drawable/radius"
@@ -22,10 +23,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/black"
             android:ems="10"
             android:hint="Enter Email"
             android:inputType="textEmailAddress"
-            android:backgroundTint="@color/black"
             android:textColor="#292828"
             android:textColorHint="#8C8B8B"
             app:layout_constraintBottom_toTopOf="@+id/passwordForm"
@@ -36,9 +37,9 @@
             android:id="@+id/passwordForm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/black"
             android:ems="10"
             android:hint="Enter Password"
-            android:backgroundTint="@color/black"
             android:inputType="textPassword"
             android:textColor="#393737"
             android:textColorHint="#8C8B8B"
@@ -74,22 +75,22 @@
             app:layout_constraintVertical_bias="0.272" />
 
         <TextView
-            android:textColor="#8E8E8E"
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Dont have an account?"
+            android:textColor="#8E8E8E"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button" />
 
         <TextView
-            android:textColor="#8E8E8E"
             android:id="@+id/registerLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Register here"
+            android:textColor="#8E8E8E"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
@@ -98,5 +99,15 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="226dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

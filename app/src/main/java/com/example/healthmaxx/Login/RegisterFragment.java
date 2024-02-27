@@ -12,23 +12,24 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.healthmaxx.LoginActivity;
 import com.example.healthmaxx.MainActivity;
 import com.example.healthmaxx.R;
 import com.example.healthmaxx.databinding.FragmentHomeBinding;
 import com.example.healthmaxx.databinding.FragmentLoginBinding;
 import com.example.healthmaxx.databinding.FragmentRegisterBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.Objects;
+
 public class RegisterFragment extends Fragment {
 
     private FragmentRegisterBinding binding;
+    private EditText passwordEditText;
+    private EditText confirmPasswordEditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,17 +44,14 @@ public class RegisterFragment extends Fragment {
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        passwordEditText = binding.passwordForm;
+        confirmPasswordEditText = binding.passwordForm2;
+
         TextView loginLink = binding.loginLink;
         loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("REGFRAG", "Login link clicked");
-//                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.registerFragment, new LoginFragment()).commit();
-//                LoginFragment loginFragment = new LoginFragment();
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                transaction.replace(R.id.registerFragmentContainer, loginFragment);
-//                transaction.commit();
-
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.registerFragmentContainer, new LoginFragment()).commit();
 
             }
@@ -63,13 +61,22 @@ public class RegisterFragment extends Fragment {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "button clicked", Toast.LENGTH_SHORT).show();
-                Log.d("REGFRAG", "Submit button clicked");
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
+                submit();
             }
         });
 
         return root;
+    }
+
+    public void submit(){
+        String password = passwordEditText.getText().toString();
+        String confirmPassword = confirmPasswordEditText.getText().toString();
+
+        if (((LoginActivity) requireActivity()).checkPasswordsMatch(password, confirmPassword)){
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getContext(), "Passwords must match!", Toast.LENGTH_LONG).show();
+        }
     }
 }
