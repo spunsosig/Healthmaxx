@@ -86,11 +86,11 @@
                 android:progress="25"
                 app:indicatorColor="#417EE6"
                 app:indicatorSize="120dp"
+                app:layout_constraintStart_toEndOf="@id/calorieProgressIndicator"
                 app:layout_constraintTop_toBottomOf="@+id/text_home"
                 app:trackColor="@color/teal_200"
                 app:trackCornerRadius="8dp"
-                app:trackThickness="12dp"
-                tools:layout_editor_absoluteX="170dp">
+                app:trackThickness="12dp">
 
             </com.google.android.material.progressindicator.CircularProgressIndicator>
 
