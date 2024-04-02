@@ -2,14 +2,16 @@ package com.example.healthmaxx;
 
 import static android.app.PendingIntent.getActivity;
 
-import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import com.example.healthmaxx.ui.foodDiary.FoodDiaryFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,11 +22,17 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.healthmaxx.databinding.ActivityMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.app.Fragment;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ActivityMainBinding binding;
     private boolean toggle;
+    FloatingActionButton addFoodBtn;
+    FloatingActionButton addExerciseBtn;
+    FloatingActionButton addWeightBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +56,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        FloatingActionButton addFoodBtn = findViewById(R.id.foodbtn);
-        FloatingActionButton addExerciseBtn = findViewById(R.id.exerciseBtn);
+        addFoodBtn = findViewById(R.id.foodbtn);
+        addExerciseBtn = findViewById(R.id.exerciseBtn);
+        addWeightBtn = findViewById(R.id.weightBtn);
 
-        toggle = false;
+        addFoodBtn.setOnClickListener(this);
+
+        toggle = true;
         FloatingActionButton addBtn = findViewById(R.id.floatingActionButton);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,33 +72,38 @@ public class MainActivity extends AppCompatActivity {
                 if (toggle){
                     addFoodBtn.setVisibility(View.VISIBLE);
                     addExerciseBtn.setVisibility(View.VISIBLE);
+                    addWeightBtn.setVisibility(View.VISIBLE);
                     addFoodBtn.startAnimation(toBottom);
                     addExerciseBtn.startAnimation(toBottom);
+                    addWeightBtn.startAnimation(toBottom);
                     addBtn.startAnimation(rotateClose);
                 } else {
                     addFoodBtn.setVisibility(View.INVISIBLE);
                     addExerciseBtn.setVisibility(View.INVISIBLE);
                     addFoodBtn.startAnimation(fromBottom);
                     addExerciseBtn.startAnimation(fromBottom);
+                    addWeightBtn.startAnimation(fromBottom);
                     addBtn.startAnimation(rotateOpen);
                 }
 
             }
         });
 
-        addFoodBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Add food button clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        addExerciseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Add Exercise button clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
+
+    @Override
+    public void onClick(View v) {
+        androidx.fragment.app.Fragment fragment = null;
+        Log.d("btnclick", "button clicked");
+
+
+        if (v == findViewById(R.id.foodbtn)){
+            Log.d("btnclick", "Food button clicked");
+            fragment = new FoodDiaryFragment();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, fragment).commit();
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.foodDiaryFragment);
+        }
+    }
 }

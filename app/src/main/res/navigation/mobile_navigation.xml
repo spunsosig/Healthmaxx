@@ -35,4 +35,9 @@
         android:id="@+id/registerFragment2"
         android:name="com.example.healthmaxx.Login.RegisterFragment"
         android:label="RegisterFragment" />
+    <fragment
+        android:id="@+id/foodDiaryFragment"
+        android:name="com.example.healthmaxx.ui.foodDiary.FoodDiaryFragment"
+        android:label="fragment_food_diary"
+        tools:layout="@layout/fragment_food_diary" />
 </navigation>

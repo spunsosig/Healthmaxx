@@ -17,4 +17,7 @@
     <string name="login_failed">"Login failed"</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="weight">Weight</string>
+    <string name="this_is_a_user_icon">This is a user icon</string>
+    <string name="progress">Progress</string>
 </resources>

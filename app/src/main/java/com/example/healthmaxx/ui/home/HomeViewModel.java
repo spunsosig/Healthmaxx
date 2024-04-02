@@ -10,8 +10,6 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<String> calorieText;
     private final MutableLiveData<String> stepText;
 
-
-
     private int calorieGoal = 2000;
     private int calorieProgress = 1255;
     private int stepGoal = 6000;

@@ -2,6 +2,7 @@ package com.example.healthmaxx.ui.profile;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,9 @@ import com.example.healthmaxx.databinding.FragmentProfileBinding;
 import com.example.healthmaxx.databinding.FragmentProgressBinding;
 import com.example.healthmaxx.ui.progress.ProgressViewModel;
 
+import app.futured.donut.DonutProgressView;
+import app.futured.donut.DonutSection;
+
 public class ProfileFragment extends Fragment {
 
     private ProfileViewModel mViewModel;
@@ -26,18 +30,6 @@ public class ProfileFragment extends Fragment {
         return new ProfileFragment();
     }
 
-//    @Override
-//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-//                             @Nullable Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.fragment_profile, container, false);
-//    }
-//
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-//        // TODO: Use the ViewModel
-//    }
 
     private FragmentProfileBinding binding;
 
@@ -49,8 +41,14 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textProfile;
-        profileViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        DonutProgressView weightDonut = binding.donutView;
+
+        weightDonut.addAmount("weight", 0.2f, Color.parseColor("#FB1D32"));
+
+//        final TextView textView = binding.textProfile;
+//        profileViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+//        return root;
+
         return root;
     }
 
