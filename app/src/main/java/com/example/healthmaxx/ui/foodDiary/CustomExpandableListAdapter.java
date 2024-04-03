@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import com.example.healthmaxx.Models.Meal;
+import com.example.healthmaxx.Models.Food;
 import com.example.healthmaxx.R;
 
 import java.util.HashMap;
@@ -17,13 +17,14 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> expandableListTitle;
-    private HashMap<String, List<Meal>> expandableListDetail;
+    private HashMap<String, List<Food>> expandableListDetail;
 
     public CustomExpandableListAdapter(Context context, List<String> expandableListTitle,
-                                       HashMap<String, List<Meal>> expandableListDetail) {
+                                       HashMap<String, List<Food>> expandableListDetail) {
         this.context = context;
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
+
     }
 
     @Override
@@ -33,20 +34,40 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
+        // Handle the "Add Food" item case
+        if (groupPosition >= expandableListTitle.size()) {
+            return 0;
+        }
+
         String groupTitle = expandableListTitle.get(groupPosition);
-        List<Meal> meals = expandableListDetail.get(groupTitle);
-        return meals != null ? meals.size() : 0;
+        List<Food> foods = expandableListDetail.get(groupTitle);
+        return foods != null ? foods.size() : 0;
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return expandableListTitle.get(groupPosition);
+        if (groupPosition < expandableListTitle.size()) {
+            // Return regular group title
+            return expandableListTitle.get(groupPosition);
+        }
+        return null;
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition);
+        // Retrieve the list of meals for the current group
+        List<Food> foods = expandableListDetail.get(expandableListTitle.get(groupPosition));
+
+        // Check if the child position is within the bounds of the meals list
+        if (childPosition < foods.size()) {
+            // Return the meal at the specified child position
+            return foods.get(childPosition);
+        } else {
+            // Otherwise, return null (no child item)
+            return null;
+        }
     }
+
 
     @Override
     public long getGroupId(int groupPosition) {
@@ -80,7 +101,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Meal meal = (Meal) getChild(groupPosition, childPosition);
+        Food food = (Food) getChild(groupPosition, childPosition);
 
         if (convertView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -88,10 +109,10 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView mealNameTextView = convertView.findViewById(R.id.mealName);
-        mealNameTextView.setText(meal.getName());
+        mealNameTextView.setText(food.getName());
 
         TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
-        String calories = String.valueOf(meal.getCalories());
+        String calories = String.valueOf(food.getCalories());
         calorieTextView.setText(calories);
 
         return convertView;

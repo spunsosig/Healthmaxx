@@ -10,7 +10,7 @@
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-24dp"
+        android:layout_marginTop="16dp"
         android:padding="12sp"
         android:text="Food diary"
         android:textSize="32sp"
@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/layoutExpList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/titleText">
@@ -28,10 +29,22 @@
             android:id="@+id/expandableListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleText" />
+            app:layout_constraintTop_toBottomOf="@+id/titleText" >
+        </ExpandableListView>
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/addFoodBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="32dp"
+        android:backgroundTint="@color/teal_200"
+        android:text="Add Food"
+        android:textSize="32dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutExpList"
+        android:gravity="center"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

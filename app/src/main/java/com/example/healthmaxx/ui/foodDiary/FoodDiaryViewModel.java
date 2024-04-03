@@ -1,11 +1,8 @@
 package com.example.healthmaxx.ui.foodDiary;
 
-import android.util.Log;
-import android.widget.ExpandableListView;
-
 import androidx.lifecycle.ViewModel;
 
-import com.example.healthmaxx.Models.Meal;
+import com.example.healthmaxx.Models.Food;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,21 +12,21 @@ import java.util.Map;
 
 public class FoodDiaryViewModel extends ViewModel {
     List<String> mealTimes;
-    List<Meal> breakfast;
-    List<Meal> lunch;
-    List<Meal> dinner;
-    HashMap<String, List<Meal>> expandableListData = new HashMap<String, List<Meal>>();
+    List<Food> breakfast;
+    List<Food> lunch;
+    List<Food> dinner;
+    HashMap<String, List<Food>> expandableListData = new HashMap<String, List<Food>>();
 
 
-    Map<String, List<Meal>> mealMap;
+    Map<String, List<Food>> mealMap;
 
     public FoodDiaryViewModel(){
 
-        Meal oats = new Meal("Oats", 230);
-        Meal milk = new Meal("Meal", 150);
-        Meal banana = new Meal("Banana",120);
-        Meal chickenCurry = new Meal("Chicken Curry", 400);
-        Meal rice = new Meal("Rice", 200);
+        Food oats = new Food("Oats", 230F);
+        Food milk = new Food("Meal", 150F);
+        Food banana = new Food("Banana",120F);
+        Food chickenCurry = new Food("Chicken Curry", 400F);
+        Food rice = new Food("Rice", 200F);
 
         breakfast = new ArrayList<>();
         breakfast.addAll(Arrays.asList(oats, milk, banana));
@@ -47,7 +44,7 @@ public class FoodDiaryViewModel extends ViewModel {
 
     }
 
-    public HashMap<String, List<Meal>> getExpandableListData() {
+    public HashMap<String, List<Food>> getExpandableListData() {
         return expandableListData;
     }
 }

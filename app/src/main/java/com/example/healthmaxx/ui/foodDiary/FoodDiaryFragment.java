@@ -4,16 +4,21 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
-import com.example.healthmaxx.Models.Meal;
+import com.example.healthmaxx.Models.Food;
+import com.example.healthmaxx.R;
 import com.example.healthmaxx.databinding.FragmentFoodDiaryBinding;
 
 import java.util.ArrayList;
@@ -25,9 +30,10 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener{
     private FragmentFoodDiaryBinding binding;
     private ExpandableListView expandableListView;
     private List<String> expandableListTitle;
-    private HashMap<String, List<Meal>> expandableListData;
+    private HashMap<String, List<Food>> expandableListData;
     private ExpandableListAdapter adapter;
     private FoodDiaryViewModel viewModel;
+    private Button addBtn;
 
 
     @Override
@@ -43,6 +49,9 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener{
         binding = FragmentFoodDiaryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        addBtn = binding.addFoodBtn;
+        addBtn.setOnClickListener(this);
+
         expandableListView = binding.expandableListView; // expandable list view
         expandableListData = viewModel.getExpandableListData(); // The dataset
         expandableListTitle = new ArrayList<String>(expandableListData.keySet()); // headers e.g. breakfast
@@ -55,7 +64,11 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-
+        if (v.getId() == addBtn.getId()){
+            Toast.makeText(this.getContext(), "Add food button clicked", Toast.LENGTH_LONG).show();
+            NavController navController = Navigation.findNavController(this.getActivity(), R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.addFoodFragment);
+        }
     }
 
     @Override
