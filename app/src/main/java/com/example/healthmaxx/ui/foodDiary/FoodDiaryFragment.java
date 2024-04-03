@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.PixelCopy;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,12 +19,20 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.example.healthmaxx.Models.Food;
+import com.example.healthmaxx.Models.FoodResponse;
 import com.example.healthmaxx.R;
+import com.example.healthmaxx.api.RequestFood;
 import com.example.healthmaxx.databinding.FragmentFoodDiaryBinding;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class FoodDiaryFragment extends Fragment implements View.OnClickListener{
 
@@ -48,6 +57,41 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         binding = FragmentFoodDiaryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        Retrofit retrofit = com.example.cinemaapp2.api.ApiClient.getClient();
+        RequestFood requestFood = retrofit.create(RequestFood.class);
+
+        String api_key = getString(R.string.api_key);
+        Log.d("API", "Key = " + api_key);
+        Call<FoodResponse> foodSearch = requestFood.getNutrition(api_key, "Chicken tikka");
+
+        // Log the URL being sent
+        String url = foodSearch.request().url().toString();
+        Log.d("API", "Request URL: " + url);
+
+        foodSearch.enqueue(new Callback<FoodResponse>() {
+            @Override
+            public void onResponse(Call<FoodResponse> call, Response<FoodResponse> response) {
+                if (response.isSuccessful()){
+                    List<Food> foods = response.body().getItems();
+
+                    for (Food food : foods){
+                        Log.d("Food", "Name: " + food.getName() + ", Calories: " + food.getCalories());
+                    }
+                } else {
+                    try {
+                        Log.e("API", "Error: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FoodResponse> call, Throwable t) {
+                Log.d("API", "API failed to connect", t);
+            }
+        });
 
         addBtn = binding.addFoodBtn;
         addBtn.setOnClickListener(this);

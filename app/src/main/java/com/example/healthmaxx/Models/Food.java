@@ -12,7 +12,7 @@ public class Food {
     private float calories;
 
     @SerializedName("serving_size_g")
-    private int serving_size_g;
+    private float serving_size_g;
 
     @SerializedName("fat_total_g")
     private float fat_total_g;
@@ -27,10 +27,10 @@ public class Food {
     private float sodium_mg;
 
     @SerializedName("potassium_mg")
-    private int potassium_mg;
+    private float potassium_mg;
 
     @SerializedName("cholesterol_mg")
-    private int cholesterol_mg;
+    private float cholesterol_mg;
 
     @SerializedName("carbohydrates_total_g")
     private float carbohydrates_total_g;
@@ -39,7 +39,7 @@ public class Food {
     private float fiber_g;
 
     @SerializedName("sugar_g")
-    private int sugar_g;
+    private float sugar_g;
 
     public Food(String name, Float calories){
         this.name = name;
@@ -54,7 +54,7 @@ public class Food {
         return calories;
     }
 
-    public int getServing_size_g() {
+    public float getServing_size_g() {
         return serving_size_g;
     }
 
@@ -74,11 +74,11 @@ public class Food {
         return sodium_mg;
     }
 
-    public int getPotassium_mg() {
+    public float getPotassium_mg() {
         return potassium_mg;
     }
 
-    public int getCholesterol_mg() {
+    public float getCholesterol_mg() {
         return cholesterol_mg;
     }
 
@@ -90,7 +90,7 @@ public class Food {
         return fiber_g;
     }
 
-    public int getSugar_g() {
+    public float getSugar_g() {
         return sugar_g;
     }
 }
