@@ -1,11 +1,14 @@
 package com.example.healthmaxx.Models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class FoodResponse {
-    private List<Food> items;
+    @SerializedName("foods")
+    private List<Food> foods;
 
-    public List<Food> getItems(){
-        return items;
+    public List<Food> getFoods() {
+        return foods;
     }
 }

@@ -8,6 +8,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.example.healthmaxx.Models.Food;
+import com.example.healthmaxx.Models.LabelNutrients;
 import com.example.healthmaxx.R;
 
 import java.util.HashMap;
@@ -109,11 +110,12 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView mealNameTextView = convertView.findViewById(R.id.mealName);
-        mealNameTextView.setText(food.getName());
+        mealNameTextView.setText(food.getDescription());
 
         TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
-        String calories = String.valueOf(food.getCalories());
-        calorieTextView.setText(calories);
+        LabelNutrients nutrients = food.getLabelNutrients();
+        float calories = nutrients.getCalories();
+        calorieTextView.setText(String.valueOf(calories));
 
         return convertView;
     }

@@ -26,6 +26,7 @@ import com.example.healthmaxx.api.RequestFood;
 import com.example.healthmaxx.databinding.FragmentAddFoodBinding;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,7 +79,7 @@ public class addFoodFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         // Initialize api_key here
-        api_key = getActivity().getString(R.string.api_key);
+        api_key = requireActivity().getResources().getString(R.string.api_key);
 
         Retrofit retrofit = com.example.cinemaapp2.api.ApiClient.getClient();
         requestFood = retrofit.create(RequestFood.class);
@@ -98,19 +99,22 @@ public class addFoodFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.submitBtn) {
             query = searchView.getQuery().toString();
-            Call<FoodResponse> foodSearchCall = requestFood.getNutrition(api_key, query);
+            Call<FoodResponse> foodSearchCall = requestFood.searchFood(api_key, query);
+
+            String url = foodSearchCall.request().url().toString();
+            Log.d("API", "Request URL: " + url);
 
             foodSearchCall.enqueue(new Callback<FoodResponse>() {
                 @Override
                 public void onResponse(Call<FoodResponse> call, Response<FoodResponse> response) {
                     if (response.isSuccessful()) {
-                        if (!response.body().getItems().isEmpty()){
-                            List<Food> foods = response.body().getItems();
-                            Log.d("API", "Food item: " + response.body().getItems().toString());
+                        if (response.body() != null && response.body().getFoods() != null){
+                            List<Food> foods = response.body().getFoods();
                             AddFoodAdapter addFoodAdapter = new AddFoodAdapter(requireContext(), foods);
                             recyclerView.setAdapter(addFoodAdapter);
                         } else {
                             Log.e("API", "Item is null");
+                            Log.e("API", response.body().toString());
                             Toast.makeText(addFoodFragment.this.getContext(), "No item called: " + query, Toast.LENGTH_LONG).show();
                         }
                     } else {

@@ -49,7 +49,7 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull AddFoodAdapter.ViewHolder holder, int position) {
-        holder.getFoodName().setText(foods.get(position).getName());
+        holder.getFoodName().setText(foods.get(position).getDescription());
     }
 
     @Override

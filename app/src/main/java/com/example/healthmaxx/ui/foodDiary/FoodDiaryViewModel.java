@@ -22,25 +22,25 @@ public class FoodDiaryViewModel extends ViewModel {
 
     public FoodDiaryViewModel(){
 
-        Food oats = new Food("Oats", 230F);
-        Food milk = new Food("Meal", 150F);
-        Food banana = new Food("Banana",120F);
-        Food chickenCurry = new Food("Chicken Curry", 400F);
-        Food rice = new Food("Rice", 200F);
-
-        breakfast = new ArrayList<>();
-        breakfast.addAll(Arrays.asList(oats, milk, banana));
-
-        lunch = new ArrayList<>();
-        lunch.addAll(Arrays.asList(chickenCurry, rice));
-
-        dinner = new ArrayList<>();
-        dinner.addAll(Arrays.asList(chickenCurry, rice));
-
-        expandableListData = new HashMap<>();
-        expandableListData.put("Breakfast", breakfast);
-        expandableListData.put("Lunch", lunch);
-        expandableListData.put("Dinner", dinner);
+//        Food oats = new Food("Oats", 230F);
+//        Food milk = new Food("Meal", 150F);
+//        Food banana = new Food("Banana",120F);
+//        Food chickenCurry = new Food("Chicken Curry", 400F);
+//        Food rice = new Food("Rice", 200F);
+//
+//        breakfast = new ArrayList<>();
+//        breakfast.addAll(Arrays.asList(oats, milk, banana));
+//
+//        lunch = new ArrayList<>();
+//        lunch.addAll(Arrays.asList(chickenCurry, rice));
+//
+//        dinner = new ArrayList<>();
+//        dinner.addAll(Arrays.asList(chickenCurry, rice));
+//
+//        expandableListData = new HashMap<>();
+//        expandableListData.put("Breakfast", breakfast);
+//        expandableListData.put("Lunch", lunch);
+//        expandableListData.put("Dinner", dinner);
 
     }
 
