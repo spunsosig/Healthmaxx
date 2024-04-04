@@ -7,22 +7,41 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SearchView;
+import android.widget.Toast;
 
+import com.example.healthmaxx.Models.Food;
+import com.example.healthmaxx.Models.FoodResponse;
 import com.example.healthmaxx.R;
+import com.example.healthmaxx.api.RequestFood;
+import com.example.healthmaxx.databinding.FragmentAddFoodBinding;
 
-public class addFoodFragment extends Fragment {
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+public class addFoodFragment extends Fragment implements View.OnClickListener {
+
+    private FragmentAddFoodBinding binding;
     private AddFoodViewModel mViewModel;
-
-    public static addFoodFragment newInstance() {
-        return new addFoodFragment();
-    }
+    private RecyclerView recyclerView;
+    private SearchView searchView;
+    private Button submitBtn;
+    private RequestFood requestFood;
+    private String api_key; // Move initialization to onCreateView() or onActivityCreated()
+    private String query;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +65,26 @@ public class addFoodFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_food, container, false);
+
+        binding = FragmentAddFoodBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        searchView = binding.searchView;
+        submitBtn = binding.submitBtn;
+        submitBtn.setOnClickListener(this);
+
+        recyclerView = binding.recyclerView;
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        // Initialize api_key here
+        api_key = getActivity().getString(R.string.api_key);
+
+        Retrofit retrofit = com.example.cinemaapp2.api.ApiClient.getClient();
+        requestFood = retrofit.create(RequestFood.class);
+
+        return root;
+
     }
 
     @Override
@@ -56,4 +94,36 @@ public class addFoodFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.submitBtn) {
+            query = searchView.getQuery().toString();
+            Call<FoodResponse> foodSearchCall = requestFood.getNutrition(api_key, query);
+
+            foodSearchCall.enqueue(new Callback<FoodResponse>() {
+                @Override
+                public void onResponse(Call<FoodResponse> call, Response<FoodResponse> response) {
+                    if (response.isSuccessful()) {
+                        if (!response.body().getItems().isEmpty()){
+                            List<Food> foods = response.body().getItems();
+                            Log.d("API", "Food item: " + response.body().getItems().toString());
+                            AddFoodAdapter addFoodAdapter = new AddFoodAdapter(requireContext(), foods);
+                            recyclerView.setAdapter(addFoodAdapter);
+                        } else {
+                            Log.e("API", "Item is null");
+                            Toast.makeText(addFoodFragment.this.getContext(), "No item called: " + query, Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Log.e("API", "No response from API");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FoodResponse> call, Throwable t) {
+                    Log.d("API", "Connection unsuccessful");
+
+                }
+            });
+        }
+    }
 }

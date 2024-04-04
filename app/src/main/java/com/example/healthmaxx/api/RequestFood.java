@@ -13,4 +13,5 @@ public interface RequestFood {
     @GET("nutrition")
     Call<FoodResponse> getNutrition(@Header("X-Api-Key") String apiKey, @Query("query") String query);
 
+
 }
