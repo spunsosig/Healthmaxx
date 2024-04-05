@@ -26,14 +26,13 @@ import com.example.healthmaxx.api.RequestFood;
 import com.example.healthmaxx.databinding.FragmentAddFoodBinding;
 
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class addFoodFragment extends Fragment implements View.OnClickListener {
+public class AddFoodFragment extends Fragment implements View.OnClickListener {
 
     private FragmentAddFoodBinding binding;
     private AddFoodViewModel mViewModel;
@@ -115,7 +114,7 @@ public class addFoodFragment extends Fragment implements View.OnClickListener {
                         } else {
                             Log.e("API", "Item is null");
                             Log.e("API", response.body().toString());
-                            Toast.makeText(addFoodFragment.this.getContext(), "No item called: " + query, Toast.LENGTH_LONG).show();
+                            Toast.makeText(AddFoodFragment.this.getContext(), "No item called: " + query, Toast.LENGTH_LONG).show();
                         }
                     } else {
                         Log.e("API", "No response from API");

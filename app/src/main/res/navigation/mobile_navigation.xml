@@ -42,7 +42,7 @@
         tools:layout="@layout/fragment_food_diary" />
     <fragment
         android:id="@+id/addFoodFragment"
-        android:name="com.example.healthmaxx.ui.addFood.addFoodFragment"
+        android:name="com.example.healthmaxx.ui.addFood.AddFoodFragment"
         android:label="fragment_add_food"
         tools:layout="@layout/fragment_add_food" />
 </navigation>

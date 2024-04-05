@@ -10,6 +10,16 @@ public class Food {
     @SerializedName("labelNutrients")
     private com.example.healthmaxx.Models.LabelNutrients labelNutrients;
 
+    private float servingSize;
+
+    public float getServingSize() {
+        return servingSize;
+    }
+
+    public void setServingSize(float servingSize) {
+        this.servingSize = servingSize;
+    }
+
     public String getDescription() {
         return description;
     }
