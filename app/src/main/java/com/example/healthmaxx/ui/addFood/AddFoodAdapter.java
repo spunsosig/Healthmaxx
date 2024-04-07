@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.healthmaxx.DB.DBHandler;
 import com.example.healthmaxx.Models.Food;
 import com.example.healthmaxx.R;
 
@@ -80,45 +81,46 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
 
-// Set the custom layout for the dialog
+                // Set the custom layout for the dialog
                 LayoutInflater inflater = LayoutInflater.from(itemView.getContext());
                 View dialogView = inflater.inflate(R.layout.dialog_food_details, null);
                 builder.setView(dialogView);
 
-// Find views in the dialog layout
+                // Find views in the dialog layout
                 Spinner mealTimeSpinner = dialogView.findViewById(R.id.spinner);
                 EditText servingSizeView = dialogView.findViewById(R.id.servingSize);
                 TextView foodTitle = dialogView.findViewById(R.id.foodName);
 
-// Set values to views
+                // Set values to views
                 foodTitle.setText(selectedFood.getDescription());
 
-// Create and set up the adapter for the spinner
+                // Create and set up the adapter for the spinner
                 List<String> mealTimes = Arrays.asList("Breakfast", "Lunch", "Dinner", "Snacks");
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(itemView.getContext(), R.layout.spinner_item, mealTimes);
                 arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
                 mealTimeSpinner.setAdapter(arrayAdapter);
 
-// Set positive button
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                // Set positive button
+                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Handle positive button click
-                        // You can retrieve the selected values from the spinner and edit text here
+                        int fdcId = selectedFood.getFdcId();
+                        float servingSize = Float.parseFloat(String.valueOf(servingSizeView.getText()));
+                        DBHandler dbHandler = new DBHandler(itemView.getContext());
+                        dbHandler.addItem(1, fdcId, servingSize);
                         dialog.dismiss(); // Dismiss the dialog
                     }
                 });
 
-// Set negative button
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                // Set negative button
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Handle negative button click
-                        dialog.dismiss(); // Dismiss the dialog
+                        dialog.dismiss();
                     }
                 });
 
-// Create and show the dialog
+                // Create and show the dialog
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
