@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.healthmaxx.Models.User;
+
 public class DBHandler extends SQLiteOpenHelper {
 
     private Context context;
@@ -90,6 +92,32 @@ public class DBHandler extends SQLiteOpenHelper {
             Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public User getUser(String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        int userId = -1; // Default value indicating user ID not found or error
+
+        try {
+            String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_NAME +
+                    " WHERE " + COLUMN_EMAIL + " = ?";
+            cursor = db.rawQuery(query, new String[]{email});
+
+            if (cursor.moveToFirst()) {
+                userId = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+                User user = new User(userId, email);
+                return user;
+            }
+        } catch (Exception e) {
+            // Handle exceptions, logging, or other error handling as needed
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
     }
 
     public boolean isLogin(String email, String password) {

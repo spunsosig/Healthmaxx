@@ -4,6 +4,7 @@ import static android.app.PendingIntent.getActivity;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import com.example.healthmaxx.Models.User;
+import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.ui.foodDiary.FoodDiaryFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -28,6 +31,7 @@ import android.app.Fragment;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ActivityMainBinding binding;
+    private User currentUser;
     private boolean toggle;
     FloatingActionButton addFoodBtn;
     FloatingActionButton addExerciseBtn;
@@ -37,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentUser = UserManager.getInstance().getCurrentUser();
+        Log.d("USER ID ", String.valueOf(currentUser.getUserId()));
 
         Animation rotateOpen = AnimationUtils.loadAnimation(this,R.anim.rotate_open_anim);
         Animation rotateClose = AnimationUtils.loadAnimation(this,R.anim.rotate_close_anim);
@@ -90,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
-
 
     @Override
     public void onClick(View v) {

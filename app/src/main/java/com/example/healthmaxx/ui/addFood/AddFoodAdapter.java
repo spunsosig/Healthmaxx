@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.healthmaxx.DB.DBHandler;
 import com.example.healthmaxx.Models.Food;
+import com.example.healthmaxx.Models.User;
 import com.example.healthmaxx.R;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.List;
 public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHolder> {
     private List<Food> foods;
     private Context context;
+    private User currentUser;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final TextView foodName;
@@ -52,32 +54,6 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
             if (v.getId() == foodName.getId()){
                 Log.d("SELECTED", foodName.getText().toString() + " " + getAdapterPosition());
                 Food selectedFood = foods.get(getAdapterPosition());
-
-//                FoodDetailsDialog dialog = new FoodDetailsDialog(itemView.getContext());
-//                FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
-//                dialog.show(fragmentManager, "Food details");
-
-//                Dialog dialog = new Dialog(itemView.getContext());
-//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                dialog.setContentView(R.layout.dialog_food_details);
-//                dialog.setCancelable(true);
-//
-//                Spinner mealTimeSpinner = (Spinner) dialog.findViewById(R.id.spinner);
-//
-//                List<String> mealTimes = Arrays.asList("Breakfast", "Lunch", "Dinner", "Snacks");
-//                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(itemView.getContext(), R.layout.spinner_item, mealTimes);
-//                arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
-//
-//                mealTimeSpinner.setAdapter(arrayAdapter);
-//
-//                EditText servingSizeView = (EditText) dialog.findViewById(R.id.servingSize);
-//                TextView foodTitle = (TextView) dialog.findViewById(R.id.foodName);
-//
-//                foodTitle.setText(selectedFood.getDescription());
-//
-//                dialog.set
-//
-//                dialog.show();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
 
@@ -107,6 +83,7 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
                         int fdcId = selectedFood.getFdcId();
                         float servingSize = Float.parseFloat(String.valueOf(servingSizeView.getText()));
                         DBHandler dbHandler = new DBHandler(itemView.getContext());
+
                         dbHandler.addItem(1, fdcId, servingSize);
                         dialog.dismiss(); // Dismiss the dialog
                     }

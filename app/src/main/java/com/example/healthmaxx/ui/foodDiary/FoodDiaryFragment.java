@@ -63,35 +63,6 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener{
 
         String api_key = getString(R.string.api_key);
         Log.d("API", "Key = " + api_key);
-//        Call<FoodResponse> foodSearch = requestFood.searchFood(api_key, "Chicken tikka and 200g rice and 200g cucumber");
-//
-//        // Log the URL being sent
-//        String url = foodSearch.request().url().toString();
-//        Log.d("API", "Request URL: " + url);
-
-//        foodSearch.enqueue(new Callback<FoodResponse>() {
-//            @Override
-//            public void onResponse(Call<FoodResponse> call, Response<FoodResponse> response) {
-//                if (response.isSuccessful()){
-//                    List<Food> foods = response.body().getItems();
-//
-//                    for (Food food : foods){
-//                        Log.d("Food", "Name: " + food.getName() + ", Calories: " + food.getCalories());
-//                    }
-//                } else {
-//                    try {
-//                        Log.e("API", "Error: " + response.errorBody().string());
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<FoodResponse> call, Throwable t) {
-//                Log.d("API", "API failed to connect", t);
-//            }
-//        });
 
         addBtn = binding.addFoodBtn;
         addBtn.setOnClickListener(this);

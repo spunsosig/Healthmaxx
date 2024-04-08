@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.example.healthmaxx.DB.DBHandler;
 import com.example.healthmaxx.LoginActivity;
 import com.example.healthmaxx.MainActivity;
+import com.example.healthmaxx.Models.User;
+import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.R;
 import com.example.healthmaxx.databinding.FragmentHomeBinding;
 import com.example.healthmaxx.databinding.FragmentLoginBinding;
@@ -80,6 +82,12 @@ public class RegisterFragment extends Fragment {
         if (isSecure(password, confirmPassword, email)){
             DBHandler db = new DBHandler(getContext());
             db.addUser(email, password);
+
+            User user = db.getUser(email);
+            UserManager.getInstance().setCurrentUser(user);
+
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
         }
 
     }

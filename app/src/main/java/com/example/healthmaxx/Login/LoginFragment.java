@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.example.healthmaxx.DB.DBHandler;
 import com.example.healthmaxx.MainActivity;
+import com.example.healthmaxx.Models.User;
+import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.R;
 import com.example.healthmaxx.databinding.FragmentLoginBinding;
 
@@ -49,16 +51,16 @@ public class LoginFragment extends Fragment {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getContext(), "button clicked", Toast.LENGTH_SHORT).show();
-//                Log.d("LOGINFRAG", "Submit button clicked");
-//                Intent intent = new Intent(getActivity(), MainActivity.class);
-//                startActivity(intent);
+
                 String email = binding.emailForm.getText().toString();
                 String password = binding.passwordForm.getText().toString();
 
                 DBHandler myDb = new DBHandler(getContext());
+
                 if (myDb.isLogin(email, password)) {
                     Intent intent = new Intent(getActivity(), MainActivity.class);
+                    User user = myDb.getUser(email);
+                    UserManager.getInstance().setCurrentUser(user);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), "Email or password incorrect!", Toast.LENGTH_SHORT).show();
