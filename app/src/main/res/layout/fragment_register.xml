@@ -20,56 +20,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/emailForm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/black"
-            android:ems="10"
-            android:hint="Enter Email"
-            android:inputType="textEmailAddress"
-            android:textColor="#292828"
-            android:textColorHint="#8C8B8B"
-            app:layout_constraintBottom_toTopOf="@+id/passwordForm"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <EditText
-            android:id="@+id/passwordForm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/black"
-            android:ems="10"
-            android:hint="Enter Password"
-            android:inputType="textPassword"
-            android:textColor="#393737"
-            android:textColorHint="#8C8B8B"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/passwordForm2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="@color/black"
-            android:ems="10"
-            android:hint="Retype Password"
-            android:inputType="textPassword"
-            android:textColor="#393737"
-            android:textColorHint="#8C8B8B"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordForm" />
-
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:layout_marginTop="16dp"
             android:text="Register"
             android:textAlignment="center"
             android:textColor="#2C2C2C"
@@ -80,17 +35,89 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+            <EditText
+                android:id="@+id/nameForm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/black"
+                android:ems="10"
+                android:hint="Enter Name"
+                android:inputType="textPassword"
+                android:textColor="#393737"
+                android:textColorHint="#8C8B8B"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@+id/passwordForm2"
+                tools:layout_editor_absoluteX="58dp" />
+
+            <EditText
+                android:id="@+id/emailForm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/black"
+                android:ems="10"
+                android:hint="Enter Email"
+                android:inputType="textEmailAddress"
+                android:textColor="#292828"
+                android:textColorHint="#8C8B8B"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.504"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView2" />
+
+            <EditText
+                android:id="@+id/passwordForm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/black"
+                android:ems="10"
+                android:hint="Enter Password"
+                android:inputType="textPassword"
+                android:textColor="#393737"
+                android:textColorHint="#8C8B8B"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@+id/emailForm"
+                tools:layout_editor_absoluteX="58dp" />
+
+            <EditText
+                android:id="@+id/passwordForm2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/black"
+                android:ems="10"
+                android:hint="Retype Password"
+                android:inputType="textPassword"
+                android:textColor="#393737"
+                android:textColorHint="#8C8B8B"
+                android:textSize="16sp"
+
+                app:layout_constraintTop_toBottomOf="@+id/passwordForm"
+                tools:layout_editor_absoluteX="58dp" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
             android:text="Submit"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordForm2"
-            app:layout_constraintVertical_bias="0.272" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
         <TextView
             android:id="@+id/textView3"

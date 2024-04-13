@@ -18,8 +18,11 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.example.healthmaxx.DB.DBHandler;
 import com.example.healthmaxx.Models.Food;
 import com.example.healthmaxx.Models.FoodResponse;
+import com.example.healthmaxx.Models.User;
+import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.R;
 import com.example.healthmaxx.api.RequestFood;
 import com.example.healthmaxx.databinding.FragmentFoodDiaryBinding;
@@ -67,9 +70,14 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener{
         addBtn = binding.addFoodBtn;
         addBtn.setOnClickListener(this);
 
+        DBHandler db = new DBHandler(this.getContext());
+        User user = UserManager.getInstance().getCurrentUser();
+
         expandableListView = binding.expandableListView; // expandable list view
-        expandableListData = viewModel.getExpandableListData(); // The dataset
-        expandableListTitle = new ArrayList<String>(expandableListData.keySet()); // headers e.g. breakfast
+        expandableListData = db.getFoodDiary(user);// The dataset
+        Log.d("expandableListData", "data : " + expandableListData.toString());
+
+        expandableListTitle = new ArrayList<>(expandableListData.keySet()); // headers e.g. breakfast
 
         adapter = new CustomExpandableListAdapter(this.getContext(), expandableListTitle, expandableListData);
         expandableListView.setAdapter(adapter);

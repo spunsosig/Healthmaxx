@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.healthmaxx.DB.DBHandler;
+import com.example.healthmaxx.Models.User;
+import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.R;
 import com.example.healthmaxx.databinding.FragmentHomeBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,7 +38,12 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        String greeting;
+
+        DBHandler db = new DBHandler(this.getContext());
+
+        textView.setText("Hello, " + UserManager.getInstance().getCurrentUser().getName() + "!");
 
         CircularProgressIndicator calorieProgressIndicator = binding.calorieProgressIndicator;
         calorieProgressIndicator.setIndicatorDirection(CircularProgressIndicator.INDICATOR_DIRECTION_COUNTERCLOCKWISE);

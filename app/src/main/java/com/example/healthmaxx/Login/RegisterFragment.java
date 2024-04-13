@@ -34,6 +34,7 @@ public class RegisterFragment extends Fragment {
     private EditText passwordEditText;
     private EditText confirmPasswordEditText;
     private EditText emailEditText;
+    private EditText nameEditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class RegisterFragment extends Fragment {
         passwordEditText = binding.passwordForm;
         confirmPasswordEditText = binding.passwordForm2;
         emailEditText = binding.emailForm;
+        nameEditText = binding.nameForm;
 
         TextView loginLink = binding.loginLink;
         loginLink.setOnClickListener(new View.OnClickListener() {
@@ -78,18 +80,22 @@ public class RegisterFragment extends Fragment {
         String password = passwordEditText.getText().toString();
         String confirmPassword = confirmPasswordEditText.getText().toString();
         String email = emailEditText.getText().toString();
+        String name = nameEditText.getText().toString();
 
         if (isSecure(password, confirmPassword, email)){
             DBHandler db = new DBHandler(getContext());
-            db.addUser(email, password);
+            db.addUser(email, password, name);
 
             User user = db.getUser(email);
             UserManager.getInstance().setCurrentUser(user);
 
+            User currentUser = UserManager.getInstance().getCurrentUser();
+
+//            Log.d("USER", " " + currentUser.getEmail());
+
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
         }
-
     }
 
     public boolean isSecure(String password, String confirmPassword, String email){

@@ -1,6 +1,7 @@
 package com.example.healthmaxx.ui.foodDiary;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,10 +59,20 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     public Object getChild(int groupPosition, int childPosition) {
         // Retrieve the list of meals for the current group
         List<Food> foods = expandableListDetail.get(expandableListTitle.get(groupPosition));
+        if (foods == null){
+            Log.e("NULL_LIST", "FOODS LIST IS NULL");
+            return null;
+        }
+
+        if (foods.get(childPosition).getDescription() == null){
+            Log.e("NULL_LIST", "FOODS IN POSITION IS NULL");
+
+        }
 
         // Check if the child position is within the bounds of the meals list
         if (childPosition < foods.size()) {
             // Return the meal at the specified child position
+            Log.d("CHILD", "Food is " + foods.get(childPosition).getDescription());
             return foods.get(childPosition);
         } else {
             // Otherwise, return null (no child item)
@@ -109,13 +120,15 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.list_child, null);
         }
 
+//        Log.d("CHILD", "food is "+ food.getDescription());
+
         TextView mealNameTextView = convertView.findViewById(R.id.mealName);
         mealNameTextView.setText(food.getDescription());
 
         TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
         LabelNutrients nutrients = food.getLabelNutrients();
-        float calories = nutrients.getCalories();
-        calorieTextView.setText(String.valueOf(calories));
+//        float calories = nutrients.getCalories();
+//        calorieTextView.setText(String.valueOf(calories));
 
         return convertView;
     }

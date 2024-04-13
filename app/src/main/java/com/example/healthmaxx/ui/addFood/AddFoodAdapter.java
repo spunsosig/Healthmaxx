@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.healthmaxx.DB.DBHandler;
 import com.example.healthmaxx.Models.Food;
 import com.example.healthmaxx.Models.User;
+import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.R;
 
 import java.util.ArrayList;
@@ -76,15 +77,19 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
                 arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
                 mealTimeSpinner.setAdapter(arrayAdapter);
 
+
                 // Set positive button
                 builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int fdcId = selectedFood.getFdcId();
+                        String mealtime = (String) mealTimeSpinner.getSelectedItem();
                         float servingSize = Float.parseFloat(String.valueOf(servingSizeView.getText()));
                         DBHandler dbHandler = new DBHandler(itemView.getContext());
 
-                        dbHandler.addItem(1, fdcId, servingSize);
+                        User user = UserManager.getInstance().getCurrentUser();
+
+                        dbHandler.addItem(user.getUserId(), fdcId, servingSize, mealtime);
                         dialog.dismiss(); // Dismiss the dialog
                     }
                 });

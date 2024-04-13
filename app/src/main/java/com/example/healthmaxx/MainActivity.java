@@ -43,7 +43,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         currentUser = UserManager.getInstance().getCurrentUser();
-        Log.d("USER ID ", String.valueOf(currentUser.getUserId()));
+
+        if (currentUser != null){
+            Log.d("USER ID ", String.valueOf(currentUser.getUserId()));
+        }
 
         Animation rotateOpen = AnimationUtils.loadAnimation(this,R.anim.rotate_open_anim);
         Animation rotateClose = AnimationUtils.loadAnimation(this,R.anim.rotate_close_anim);
