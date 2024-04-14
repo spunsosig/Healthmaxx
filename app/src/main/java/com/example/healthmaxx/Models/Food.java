@@ -20,6 +20,9 @@ public class Food {
     @SerializedName("foodNutrients")
     private List<FoodNutrient> foodNutrients;
 
+    @SerializedName("nutrient")
+    private Nutrient nutrient;
+
     private float servingSize;
 
     public float getServingSize() {
@@ -42,17 +45,8 @@ public class Food {
         return foodNutrients;
     }
 
-    public FoodNutrient getFoodNutrientByName(String nutrientName) {
-        List<FoodNutrient> foodNutrients = this.foodNutrients;
-
-        for (FoodNutrient nutrient : foodNutrients) {
-            if (nutrient.getName().equalsIgnoreCase(nutrientName)) {
-                return nutrient;
-            }
-        }
-
-        // Nutrient not found
-        return null;
+    public Nutrient getNutrient() {
+        return nutrient;
     }
 
 }

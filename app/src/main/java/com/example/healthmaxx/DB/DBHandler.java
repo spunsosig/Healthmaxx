@@ -210,8 +210,17 @@ public class DBHandler extends SQLiteOpenHelper {
                         public void onResponse(Call<Food> call, Response<Food> response) {
                             Food food = response.body();
                             if (food != null) {
+                                // Log the entire Food object
+                                Log.d("DBHandler", "Food: " + food.toString());
+
+                                // Log each nutrient
+                                List<FoodNutrient> nutrients = food.getFoodNutrients();
+                                for (FoodNutrient nutrient : nutrients) {
+                                    Log.d("DBHandler", "Nutrient: " + nutrient.getName() + " - " + nutrient.getNumber() + " " + nutrient.getUnitName());
+                                }
+
                                 foodsForMealTime.add(food);
-                                Log.d("dbhandler", "food: " + food.getDescription());
+                                Log.d("dbhandler", "food: " + food.getDescription() + food.getFoodNutrients());
                             } else {
                                 Log.e("dbhandler", "food is null");
                             }
@@ -225,6 +234,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
                 } while (cursorMeals.moveToNext());
             }
+
 
             // Close the cursor
             if (cursorMeals != null) {
@@ -240,6 +250,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return foodDiary;
     }
+
 
 
 

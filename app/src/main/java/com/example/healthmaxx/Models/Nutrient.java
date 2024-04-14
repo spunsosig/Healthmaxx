@@ -2,10 +2,9 @@ package com.example.healthmaxx.Models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class FoodNutrient {
-
-    @SerializedName("nutrient")
-    private Nutrient nutrient;
+public class Nutrient {
+    @SerializedName("id")
+    private int id;
 
     @SerializedName("number")
     private String number;
@@ -13,11 +12,15 @@ public class FoodNutrient {
     @SerializedName("name")
     private String name;
 
-    @SerializedName("amount")
-    private float amount;
+    @SerializedName("rank")
+    private int rank;
 
     @SerializedName("unitName")
     private String unitName;
+
+    public int getId() {
+        return id;
+    }
 
     public String getNumber() {
         return number;
@@ -27,16 +30,11 @@ public class FoodNutrient {
         return name;
     }
 
-    public float getAmount() {
-        return amount;
+    public int getRank() {
+        return rank;
     }
 
     public String getUnitName() {
         return unitName;
     }
-
-    public Nutrient getNutrient() {
-        return nutrient;
-    }
-
 }

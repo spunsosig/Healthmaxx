@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.example.healthmaxx.DB.DBHandler;
 import com.example.healthmaxx.Models.Food;
+import com.example.healthmaxx.Models.FoodNutrient;
+import com.example.healthmaxx.Models.FoodNutrientUtils;
 import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.R;
 import com.example.healthmaxx.api.RequestFood;
@@ -152,18 +154,28 @@ public class NewCustomExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         Food food = (Food) getChild(groupPosition, childPosition);
+
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.list_child, parent, false);
         }
 
         TextView mealNameTextView = convertView.findViewById(R.id.mealName);
+        TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
+
         if (food != null){
             mealNameTextView.setText(food.getDescription());
             Log.d("foodChild", food.getDescription());
-            TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
-//            Log.d("foodChild")
-//            calorieTextView.setText(food.getFoodNutrientByName("Energy").getNumber());
+
+            calorieTextView.setText(FoodNutrientUtils.findNutrientByName(food.getFoodNutrients(),"Energy").getNumber());
+
+            if (food.getFoodNutrients() != null){
+                for (FoodNutrient foodNutrient: food.getFoodNutrients()){
+                    Log.d("nutrients", ": " + foodNutrient.getNutrient().getName() + " " + foodNutrient.getNutrient().getNumber() + foodNutrient.getNutrient().getUnitName());
+                }
+            } else {
+                Log.e("nutrients", "nutrients are null");
+            }
         } else {
             Log.d("foodChild", "foodChild is null");
         }
