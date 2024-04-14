@@ -29,6 +29,7 @@ import com.example.healthmaxx.databinding.FragmentFoodDiaryBinding;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,7 +78,9 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener{
         expandableListData = db.getFoodDiary(user);// The dataset
         Log.d("expandableListData", "data : " + expandableListData.toString());
 
-        expandableListTitle = new ArrayList<>(expandableListData.keySet()); // headers e.g. breakfast
+//        expandableListTitle = new ArrayList<>(expandableListData.keySet()); // headers e.g. breakfast
+
+        expandableListTitle = Arrays.asList("Breakfast", "Lunch", "Dinner", "Snacks");
 
         adapter = new NewCustomExpandableListAdapter(this.getContext(), expandableListTitle, expandableListData);
         expandableListView.setAdapter(adapter);

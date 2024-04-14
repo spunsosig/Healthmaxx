@@ -11,13 +11,21 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.healthmaxx.Models.Food;
+import com.example.healthmaxx.Models.FoodNutrient;
 import com.example.healthmaxx.Models.Meal;
 import com.example.healthmaxx.Models.User;
+import com.example.healthmaxx.R;
+import com.example.healthmaxx.api.RequestFood;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -52,21 +60,21 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME +
-                        " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        COLUMN_NAME + " TEXT, " +
-                        COLUMN_EMAIL + " TEXT, " +
-                        COLUMN_PASSWORD + " TEXT)";
+                " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_NAME + " TEXT, " +
+                COLUMN_EMAIL + " TEXT, " +
+                COLUMN_PASSWORD + " TEXT)";
 
         String query2 = "CREATE TABLE " + TABLE_NAME2 +
-                        " (" + COLUMN_ID2 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        COLUMN_USERID + " INTEGER, " +
-                        COLUMN_FDCID + " INTEGER, " +
-                        COLUMN_DESCRIPTION + " TEXT, " +
-                        COLUMN_SERVINGSIZE + " FLOAT, " +
-                        COLUMN_MEALTIME + " STRING " +
-                        COLUMN_DATE + " DATE DEFAULT CURRENT_TIMESTAMP, " +
-                        "CONSTRAINT FK_User_id FOREIGN KEY (" + COLUMN_USERID + ") " +
-                        "REFERENCES " + TABLE_NAME + "(" + COLUMN_ID + "))";
+                " (" + COLUMN_ID2 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_USERID + " INTEGER, " +
+                COLUMN_FDCID + " INTEGER, " +
+                COLUMN_DESCRIPTION + " TEXT, " +
+                COLUMN_SERVINGSIZE + " FLOAT, " +
+                COLUMN_MEALTIME + " STRING " +
+                COLUMN_DATE + " DATE DEFAULT CURRENT_TIMESTAMP, " +
+                "CONSTRAINT FK_User_id FOREIGN KEY (" + COLUMN_USERID + ") " +
+                "REFERENCES " + TABLE_NAME + "(" + COLUMN_ID + "))";
 
         db.execSQL(query);
         db.execSQL(query2);
@@ -148,22 +156,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return null;
     }
 
-//    public HashMap<String, List<Food>> getFoodDiary(User user){
-//        int userId = user.getUserId();
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursorMeals = null;
-//        Cursor cursorMealTimes = null;
-//
-//        HashMap<String, List<Food>> foodDiary = new HashMap<>();
-//
-//        String queryMeals = "SELECT * FROM " + TABLE_NAME2 +
-//                " WHERE " + COLUMN_USERID + "=userId";
-//
-//        cursorMeals = db.rawQuery(queryMeals, null);
-//
-//    }
-
-
     public List<Integer> getFoodDiaryFdcIds(User user){
         int userId = user.getUserId();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -199,15 +191,38 @@ public class DBHandler extends SQLiteOpenHelper {
             // Create a list to hold foods for the current meal time
             List<Food> foodsForMealTime = new ArrayList<>();
 
-            // Loop through the cursor to populate the foods list
+            // Loop through the cursor to initiate Retrofit calls
             if (cursorMeals != null && cursorMeals.moveToFirst()) {
                 do {
                     int fdcId = cursorMeals.getInt(cursorMeals.getColumnIndex(COLUMN_FDCID));
-                    String description = cursorMeals.getString(cursorMeals.getColumnIndex(COLUMN_DESCRIPTION));
 
-                    Food food = new Food(fdcId, description); // Assuming you have a way to construct Food object from cursor data
-                    // Populate food object from cursor data
-                    foodsForMealTime.add(food);
+                    Retrofit retrofit = com.example.cinemaapp2.api.ApiClient.getClient();
+                    RequestFood requestFood = retrofit.create(RequestFood.class);
+
+                    String apiKey = context.getResources().getString(R.string.api_key);
+                    String url = requestFood.findFoodById(apiKey, fdcId).request().url().toString();
+                    Log.d("DBHandler", "API Request URL: " + url);
+
+                    Call<Food> findFoodById = requestFood.findFoodById(apiKey, fdcId);
+
+                    findFoodById.enqueue(new Callback<Food>() {
+                        @Override
+                        public void onResponse(Call<Food> call, Response<Food> response) {
+                            Food food = response.body();
+                            if (food != null) {
+                                foodsForMealTime.add(food);
+                                Log.d("dbhandler", "food: " + food.getDescription());
+                            } else {
+                                Log.e("dbhandler", "food is null");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Food> call, Throwable t) {
+                            Log.e("FAILURE", "FAILED TO CONNECT TO API");
+                        }
+                    });
+
                 } while (cursorMeals.moveToNext());
             }
 
@@ -225,6 +240,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return foodDiary;
     }
+
 
 
     public boolean isLogin(String email, String password) {

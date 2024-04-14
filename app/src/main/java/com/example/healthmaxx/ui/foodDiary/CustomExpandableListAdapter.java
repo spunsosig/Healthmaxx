@@ -9,15 +9,11 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.example.healthmaxx.Models.Food;
-import com.example.healthmaxx.Models.LabelNutrients;
+import com.example.healthmaxx.Models.FoodNutrient;
 import com.example.healthmaxx.R;
-import com.example.healthmaxx.api.RequestFood;
 
 import java.util.HashMap;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Retrofit;
 
 public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -131,7 +127,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         mealNameTextView.setText(food.getDescription());
 
         TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
-        LabelNutrients nutrients = food.getLabelNutrients();
+//        FoodNutrient nutrients = food.getLabelNutrients();
 //        float calories = nutrients.getCalories();
 //        calorieTextView.setText(String.valueOf(calories));
 

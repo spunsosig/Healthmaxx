@@ -43,7 +43,12 @@ public class HomeFragment extends Fragment {
 
         DBHandler db = new DBHandler(this.getContext());
 
-        textView.setText("Hello, " + UserManager.getInstance().getCurrentUser().getName() + "!");
+        if (UserManager.getInstance().isLoggedIn()){
+            textView.setText("Hello, " + UserManager.getInstance().getCurrentUser().getName() + "!");
+        } else {
+            textView.setText("Hello, guest! ");
+
+        }
 
         CircularProgressIndicator calorieProgressIndicator = binding.calorieProgressIndicator;
         calorieProgressIndicator.setIndicatorDirection(CircularProgressIndicator.INDICATOR_DIRECTION_COUNTERCLOCKWISE);

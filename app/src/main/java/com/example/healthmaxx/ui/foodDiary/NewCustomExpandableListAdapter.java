@@ -158,9 +158,15 @@ public class NewCustomExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView mealNameTextView = convertView.findViewById(R.id.mealName);
-        mealNameTextView.setText(food.getDescription());
-        TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
-
+        if (food != null){
+            mealNameTextView.setText(food.getDescription());
+            Log.d("foodChild", food.getDescription());
+            TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
+//            Log.d("foodChild")
+//            calorieTextView.setText(food.getFoodNutrientByName("Energy").getNumber());
+        } else {
+            Log.d("foodChild", "foodChild is null");
+        }
         return convertView;
     }
 
