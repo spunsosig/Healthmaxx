@@ -79,7 +79,7 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener{
 
         expandableListTitle = new ArrayList<>(expandableListData.keySet()); // headers e.g. breakfast
 
-        adapter = new CustomExpandableListAdapter(this.getContext(), expandableListTitle, expandableListData);
+        adapter = new NewCustomExpandableListAdapter(this.getContext(), expandableListTitle, expandableListData);
         expandableListView.setAdapter(adapter);
 
         return root;

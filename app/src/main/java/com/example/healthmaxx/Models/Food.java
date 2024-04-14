@@ -4,6 +4,12 @@ import com.example.healthmaxx.Models.LabelNutrients;
 import com.google.gson.annotations.SerializedName;
 
 public class Food {
+
+    public Food(int fdcId, String description){
+        this.fdcId = fdcId;
+        this.description = description;
+    }
+
     @SerializedName(("fdcId"))
     private int fdcId;
 

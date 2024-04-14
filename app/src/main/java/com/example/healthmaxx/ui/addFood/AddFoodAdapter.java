@@ -89,7 +89,7 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
 
                         User user = UserManager.getInstance().getCurrentUser();
 
-                        dbHandler.addItem(user.getUserId(), fdcId, servingSize, mealtime);
+                        dbHandler.addItem(user.getUserId(), fdcId, servingSize, mealtime, selectedFood.getDescription());
                         dialog.dismiss(); // Dismiss the dialog
                     }
                 });

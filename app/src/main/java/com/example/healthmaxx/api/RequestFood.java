@@ -13,5 +13,6 @@ public interface RequestFood {
     @GET("foods/search")
     Call<FoodResponse> searchFood(@Header("X-Api-Key") String apiKey, @Query("query") String query);
 
-
+    @GET("food/{fdcid}")
+    Call<Food> findFoodById(@Header("X-Api-Key") String apiKey, @Query("fdcId") int fdcId);
 }

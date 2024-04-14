@@ -11,9 +11,13 @@ import android.widget.TextView;
 import com.example.healthmaxx.Models.Food;
 import com.example.healthmaxx.Models.LabelNutrients;
 import com.example.healthmaxx.R;
+import com.example.healthmaxx.api.RequestFood;
 
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
 
 public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -58,6 +62,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public Object getChild(int groupPosition, int childPosition) {
         // Retrieve the list of meals for the current group
+
         List<Food> foods = expandableListDetail.get(expandableListTitle.get(groupPosition));
         if (foods == null){
             Log.e("NULL_LIST", "FOODS LIST IS NULL");

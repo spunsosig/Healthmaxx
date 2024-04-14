@@ -23,7 +23,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private Context context;
     private static final String DATABASE_NAME = "healthmaxx.db";
-    private static final int VERSION = 4;
+    private static final int VERSION = 5;
 
     // USER TABLE
     private static final String TABLE_NAME = "users";
@@ -37,6 +37,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ID2 = "id";
     private static final String COLUMN_USERID = "user_id";
     private static final String COLUMN_FDCID = "fdc_id";
+    private static final String COLUMN_DESCRIPTION = "description";
     private static final String COLUMN_SERVINGSIZE = "serving_size";
     private static final String COLUMN_MEALTIME = "meal_time";
     private static final String COLUMN_DATE = "date";
@@ -60,6 +61,7 @@ public class DBHandler extends SQLiteOpenHelper {
                         " (" + COLUMN_ID2 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         COLUMN_USERID + " INTEGER, " +
                         COLUMN_FDCID + " INTEGER, " +
+                        COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_SERVINGSIZE + " FLOAT, " +
                         COLUMN_MEALTIME + " STRING " +
                         COLUMN_DATE + " DATE DEFAULT CURRENT_TIMESTAMP, " +
@@ -89,7 +91,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void addItem(int userId, int fdcId, float servingSize, String mealTime){
+    public void addItem(int userId, int fdcId, float servingSize, String mealTime, String description){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -97,6 +99,8 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(COLUMN_FDCID, fdcId);
         cv.put(COLUMN_SERVINGSIZE, servingSize);
         cv.put(COLUMN_MEALTIME, mealTime);
+        cv.put(COLUMN_DESCRIPTION, description);
+
 
         long result = db.insert(TABLE_NAME2, null, cv);
 
@@ -159,6 +163,21 @@ public class DBHandler extends SQLiteOpenHelper {
 //
 //    }
 
+
+    public List<Integer> getFoodDiaryFdcIds(User user){
+        int userId = user.getUserId();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT " + COLUMN_FDCID +
+                " FROM " + TABLE_NAME2 +
+                " WHERE " + COLUMN_USERID + "=" + userId;
+
+        Cursor cursor = db.rawQuery(query, null);
+        List<Integer> fdcIds = (List<Integer>) cursor;
+
+        return fdcIds;
+    }
+
     public HashMap<String, List<Food>> getFoodDiary(User user) {
         int userId = user.getUserId();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -183,7 +202,10 @@ public class DBHandler extends SQLiteOpenHelper {
             // Loop through the cursor to populate the foods list
             if (cursorMeals != null && cursorMeals.moveToFirst()) {
                 do {
-                    Food food = new Food(); // Assuming you have a way to construct Food object from cursor data
+                    int fdcId = cursorMeals.getInt(cursorMeals.getColumnIndex(COLUMN_FDCID));
+                    String description = cursorMeals.getString(cursorMeals.getColumnIndex(COLUMN_DESCRIPTION));
+
+                    Food food = new Food(fdcId, description); // Assuming you have a way to construct Food object from cursor data
                     // Populate food object from cursor data
                     foodsForMealTime.add(food);
                 } while (cursorMeals.moveToNext());
@@ -236,9 +258,9 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 //        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 
-        if (oldVersion < 4) {
+        if (oldVersion < 5) {
             String alterQuery = "ALTER TABLE " + TABLE_NAME2 +
-                    " ADD COLUMN " + COLUMN_MEALTIME + " TEXT"; // Define new column
+                    " ADD COLUMN " + COLUMN_DESCRIPTION + " TEXT"; // Define new column
             db.execSQL(alterQuery);
         }
     }
