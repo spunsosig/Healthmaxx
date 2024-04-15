@@ -1,6 +1,7 @@
 package com.example.healthmaxx.ui.foodDiary;
 
 import android.content.Context;
+import android.health.connect.datatypes.units.Energy;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +11,13 @@ import android.widget.TextView;
 
 import com.example.healthmaxx.Models.Food;
 import com.example.healthmaxx.Models.FoodNutrient;
+import com.example.healthmaxx.Models.FoodNutrientUtils;
+import com.example.healthmaxx.Models.LabelNutrients;
 import com.example.healthmaxx.R;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -121,15 +125,32 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.list_child, null);
         }
 
-//        Log.d("CHILD", "food is "+ food.getDescription());
+        Log.d("FoodObject", "Description: " + food.getDescription());
+        Log.d("FoodObject", "FDC ID: " + food.getFdcId());
+        Log.d("FoodObject", "Serving Size: " + food.getServingSize());
+        // Similarly, log other fields as needed
+
+        // If you want to log the label nutrients as well
+        LabelNutrients labelNutrients = food.getLabelNutrients();
+        if (labelNutrients != null) {
+            Log.d("FoodObject", food.getDescription());
+            Log.d("FoodObject", "Calories: " + labelNutrients.getCalories().getValue());
+            Log.d("FoodObject", "Fat: " + labelNutrients.getFat().getValue());
+            // Log other label nutrients as needed
+            TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
+            calorieTextView.setText(String.valueOf(food.getLabelNutrients().getCalories().getValue()) + " kcal");
+        } else {
+            Log.d("FoodObject", "Label Nutrients are null");
+
+            TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
+            calorieTextView.setText("Not Found");
+
+        }
 
         TextView mealNameTextView = convertView.findViewById(R.id.mealName);
         mealNameTextView.setText(food.getDescription());
 
-        TextView calorieTextView = convertView.findViewById(R.id.mealCalories);
-//        FoodNutrient nutrients = food.getLabelNutrients();
-//        float calories = nutrients.getCalories();
-//        calorieTextView.setText(String.valueOf(calories));
+
 
         return convertView;
     }

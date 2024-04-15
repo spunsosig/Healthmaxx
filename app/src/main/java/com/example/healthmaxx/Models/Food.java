@@ -6,10 +6,14 @@ import java.util.List;
 
 public class Food {
 
-    public Food(int fdcId, String description){
+    public Food(int fdcId, String description, LabelNutrients labelNutrients){
         this.fdcId = fdcId;
         this.description = description;
+        this.labelNutrients = labelNutrients;
     }
+
+    @SerializedName("labelNutrients")
+    private LabelNutrients labelNutrients;
 
     @SerializedName(("fdcId"))
     private int fdcId;
@@ -21,7 +25,7 @@ public class Food {
     private List<FoodNutrient> foodNutrients;
 
     @SerializedName("nutrient")
-    private Nutrient nutrient;
+    private NutrientOld nutrient;
 
     private float servingSize;
 
@@ -45,8 +49,11 @@ public class Food {
         return foodNutrients;
     }
 
-    public Nutrient getNutrient() {
+    public NutrientOld getNutrient() {
         return nutrient;
     }
 
+    public LabelNutrients getLabelNutrients() {
+        return labelNutrients;
+    }
 }

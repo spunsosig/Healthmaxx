@@ -215,9 +215,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
                                 // Log each nutrient
                                 List<FoodNutrient> nutrients = food.getFoodNutrients();
-                                for (FoodNutrient nutrient : nutrients) {
-                                    Log.d("DBHandler", "Nutrient: " + nutrient.getName() + " - " + nutrient.getNumber() + " " + nutrient.getUnitName());
-                                }
 
                                 foodsForMealTime.add(food);
                                 Log.d("dbhandler", "food: " + food.getDescription() + food.getFoodNutrients());
@@ -242,6 +239,7 @@ public class DBHandler extends SQLiteOpenHelper {
             }
 
             // Add the list of foods for the current meal time to the food diary HashMap
+
             foodDiary.put(mealTime, foodsForMealTime);
         }
 

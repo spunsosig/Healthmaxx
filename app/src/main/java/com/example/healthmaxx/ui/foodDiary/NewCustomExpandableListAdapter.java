@@ -80,46 +80,6 @@ public class NewCustomExpandableListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-//    @Override
-//    public Object getChild(int groupPosition, int childPosition) {
-//
-//        String groupKey = expandableListTitle.get(groupPosition);
-//        List<Food> foods = expandableListData.get(groupKey);
-//
-//        Retrofit retrofit = com.example.cinemaapp2.api.ApiClient.getClient();
-//        RequestFood requestFood = retrofit.create(RequestFood.class);
-//
-//        DBHandler db = new DBHandler(context);
-//
-////        List<Integer> fdcIds = db.getFoodDiaryFdcIds(UserManager.getInstance().getCurrentUser());
-//
-//        Log.d("FoodPos", food)
-//
-//        String api_key = this.context.getResources().getString(R.string.api_key);
-//
-//        int id = 0;
-//
-//        Call<Food> findFoodById = requestFood.findFoodById(api_key, id);
-//
-//        findFoodById.enqueue(new Callback<Food>() {
-//            @Override
-//            public void onResponse(Call<Food> call, Response<Food> response) {
-//                Food food = response.body();
-//                if (food.getDescription() != null){
-//                    Log.d("FOODITEM", food.getDescription());
-//                } else {
-//                    Log.e("FOODITEM", "FOOD DESCRIPTION IS NULL");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Food> call, Throwable t) {
-//                Log.e("API", "FAILED TO FETCH FOODS ", t);
-//            }
-//        });
-//
-//        return null;
-//    }
 
     @Override
     public long getGroupId(int groupPosition) {
@@ -171,7 +131,7 @@ public class NewCustomExpandableListAdapter extends BaseExpandableListAdapter {
 
             if (food.getFoodNutrients() != null){
                 for (FoodNutrient foodNutrient: food.getFoodNutrients()){
-                    Log.d("nutrients", ": " + foodNutrient.getNutrient().getName() + " " + foodNutrient.getNutrient().getNumber() + foodNutrient.getNutrient().getUnitName());
+                    Log.d("nutrients", food.getDescription() + " : " + foodNutrient.getNutrient().getName() + " " + foodNutrient.getNutrient().getNumber() + foodNutrient.getNutrient().getUnitName());
                 }
             } else {
                 Log.e("nutrients", "nutrients are null");
