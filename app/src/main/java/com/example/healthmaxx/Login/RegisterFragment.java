@@ -64,7 +64,7 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        Button submitBtn = binding.button;
+        Button submitBtn = binding.submitBtn2;
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,8 +93,10 @@ public class RegisterFragment extends Fragment {
 
 //            Log.d("USER", " " + currentUser.getEmail());
 
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(getActivity(), MainActivity.class);
+//            startActivity(intent);
+
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.registerFragmentContainer, new CalculateBMR()).commit();
         }
     }
 
@@ -103,8 +105,8 @@ public class RegisterFragment extends Fragment {
             if (((LoginActivity) requireActivity()).isValidEmail(email)) {
                 if (((LoginActivity) requireActivity()).checkPasswordsMatch(password, confirmPassword)){
                     if (((LoginActivity)requireActivity()).isSecurePassword(password) && ((LoginActivity)requireActivity()).isSecurePassword(confirmPassword)) {
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(getActivity(), MainActivity.class);
+//                        startActivity(intent);
                         return true;
                     } else {
                         Toast.makeText(getContext(), "Passwords must be a minimum of 8 characters and contain at least one digit and capital letter", Toast.LENGTH_LONG).show();

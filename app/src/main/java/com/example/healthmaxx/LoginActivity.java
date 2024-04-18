@@ -8,6 +8,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.healthmaxx.Login.LoginFragment;
 import com.example.healthmaxx.Login.RegisterFragment;
 
 import java.util.regex.Matcher;
@@ -24,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Example for replacing with RegisterFragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, new RegisterFragment());
+        transaction.replace(R.id.fragmentContainer, new LoginFragment());
         transaction.commit();
     }
 

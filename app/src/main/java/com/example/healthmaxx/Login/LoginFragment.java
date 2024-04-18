@@ -47,7 +47,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        Button submitBtn = binding.button;
+        Button submitBtn = binding.submitBtn2;
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

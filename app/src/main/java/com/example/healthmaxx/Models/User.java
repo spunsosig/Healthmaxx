@@ -6,6 +6,9 @@ public class User implements Serializable {
     private int userId;
     private String email;
     private String name;
+    private Double BMR = 1600.0;
+    private Double calorieGoal = 2000.0;
+    private Double calorieProgress = 0.0;
 
 
     public User(int id, String email, String name){
@@ -38,4 +41,27 @@ public class User implements Serializable {
         return name;
     }
 
+    public Double getCalorieGoal() {
+        return calorieGoal;
+    }
+
+    public void setCalorieGoal(Double calorieGoal) {
+        this.calorieGoal = calorieGoal;
+    }
+
+    public Double getBMR() {
+        return BMR;
+    }
+
+    public void setBMR(Double BMR) {
+        this.BMR = BMR;
+    }
+
+    public Double getCalorieProgress() {
+        return calorieProgress;
+    }
+
+    public void setCalorieProgress(Double calorieProgress) {
+        this.calorieProgress = calorieProgress;
+    }
 }

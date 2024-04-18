@@ -45,4 +45,8 @@
         android:name="com.example.healthmaxx.ui.addFood.AddFoodFragment"
         android:label="fragment_add_food"
         tools:layout="@layout/fragment_add_food" />
+    <fragment
+        android:id="@+id/calculateBMR"
+        android:name="com.example.healthmaxx.Login.CalculateBMR"
+        android:label="CalculateBMR" />
 </navigation>
