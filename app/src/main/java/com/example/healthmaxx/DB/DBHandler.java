@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 
 import com.example.healthmaxx.Models.Food;
 import com.example.healthmaxx.Models.FoodNutrient;
-import com.example.healthmaxx.Models.Meal;
 import com.example.healthmaxx.Models.User;
 import com.example.healthmaxx.R;
 import com.example.healthmaxx.api.RequestFood;
@@ -20,7 +19,6 @@ import com.example.healthmaxx.api.RequestFood;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +29,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private Context context;
     private static final String DATABASE_NAME = "healthmaxx.db";
-    private static final int VERSION = 5;
+    private static final int VERSION = 7;
 
     // USER TABLE
     private static final String TABLE_NAME = "users";
@@ -39,6 +37,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_NAME = "name";
     private static final String COLUMN_EMAIL = "email";
     private static final String COLUMN_PASSWORD = "password";
+    private static final String COLUMN_CALORIEGOAL = "calorieGoal";
 
     // TABLE STORING FOOD DIARY ENTRIES
     private static final String TABLE_NAME2 = "food_diary";
@@ -63,7 +62,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_NAME + " TEXT, " +
                 COLUMN_EMAIL + " TEXT, " +
-                COLUMN_PASSWORD + " TEXT)";
+                COLUMN_PASSWORD + " TEXT, " +
+                COLUMN_CALORIEGOAL + " DOUBLE)";
 
         String query2 = "CREATE TABLE " + TABLE_NAME2 +
                 " (" + COLUMN_ID2 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -249,8 +249,23 @@ public class DBHandler extends SQLiteOpenHelper {
         return foodDiary;
     }
 
+    public Double getCalorieGoal(int userid){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        Double calorieGoal = null;
 
+        String query = "SELECT " + COLUMN_CALORIEGOAL + " FROM " + TABLE_NAME +
+                " WHERE " + COLUMN_ID + " = " + userid;
 
+        cursor = db.rawQuery(query, null);
+
+        if (cursor != null && cursor.moveToFirst()){
+            calorieGoal = cursor.getDouble(cursor.getColumnIndex(COLUMN_CALORIEGOAL));
+            cursor.close();
+        }
+
+        return calorieGoal;
+    }
 
     public boolean isLogin(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -283,10 +298,23 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 //        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 
-        if (oldVersion < 5) {
-            String alterQuery = "ALTER TABLE " + TABLE_NAME2 +
-                    " ADD COLUMN " + COLUMN_DESCRIPTION + " TEXT"; // Define new column
+        if (oldVersion < 7) {
+            String alterQuery = "ALTER TABLE " + TABLE_NAME +
+                    " ADD COLUMN " + COLUMN_CALORIEGOAL + " DOUBLE"; // Define new column
             db.execSQL(alterQuery);
         }
+    }
+
+    public void addCalorieGoal(int userId, Double calorieGoal){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_CALORIEGOAL, calorieGoal);
+
+        String query = "UPDATE " + TABLE_NAME + " SET " + COLUMN_CALORIEGOAL + " = " + calorieGoal +
+                " WHERE " + COLUMN_ID + " = " + userId;
+
+        db.execSQL(query);
+
     }
 }

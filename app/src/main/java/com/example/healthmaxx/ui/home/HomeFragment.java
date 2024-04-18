@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
         User user = UserManager.getInstance().getCurrentUser();
 
         if (user != null){
-            calorieGoal = user.getCalorieGoal();
+            calorieGoal = db.getCalorieGoal(user.getUserId());
             calorieProgress = user.getCalorieProgress();
         }
 

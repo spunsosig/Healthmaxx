@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.healthmaxx.DB.DBHandler;
 import com.example.healthmaxx.MainActivity;
 import com.example.healthmaxx.Models.User;
 import com.example.healthmaxx.Models.UserManager;
@@ -92,6 +93,9 @@ public class CalculateBMR extends Fragment {
                 User user = UserManager.getInstance().getCurrentUser();
                 user.setBMR(BMR);
                 user.setCalorieGoal(calorieGoal);
+
+                DBHandler db = new DBHandler(getContext());
+                db.addCalorieGoal(UserManager.getInstance().getCurrentUser().getUserId(), calorieGoal);
 
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);

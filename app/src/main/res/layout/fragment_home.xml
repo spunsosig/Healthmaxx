@@ -59,7 +59,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/calorieProgressIndicator"
                 app:layout_constraintStart_toStartOf="@+id/calorieProgressIndicator"
-                app:layout_constraintTop_toTopOf="@+id/calorieProgressIndicator" />
+                app:layout_constraintTop_toTopOf="@+id/calorieProgressIndicator"
+                app:layout_constraintVertical_bias="0.301" />
 
             <TextView
                 android:id="@+id/textView"
@@ -70,6 +71,17 @@
                 app:layout_constraintEnd_toEndOf="@+id/calorieProgressIndicator"
                 app:layout_constraintStart_toStartOf="@+id/calorieProgressIndicator"
                 app:layout_constraintTop_toBottomOf="@+id/calorieProgressIndicator" />
+
+
+            <Button
+                android:id="@+id/calorieAddBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView">
+            </Button>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -107,10 +119,13 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/stepProgressIndicator"
+                app:layout_constraintHorizontal_bias="0.473"
                 app:layout_constraintStart_toStartOf="@+id/stepProgressIndicator"
-                app:layout_constraintTop_toTopOf="@+id/stepProgressIndicator" />
+                app:layout_constraintTop_toTopOf="@+id/stepProgressIndicator"
+                app:layout_constraintVertical_bias="0.294" />
 
             <TextView
+                android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Steps"
@@ -118,6 +133,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/stepProgressIndicator"
                 app:layout_constraintTop_toBottomOf="@+id/stepProgressIndicator" />
+
+            <Button
+                android:id="@+id/stepAddBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView9"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
