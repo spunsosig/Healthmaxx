@@ -1,9 +1,12 @@
 package com.example.healthmaxx.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +25,8 @@ public class HomeFragment extends Fragment {
     boolean toggle = false;
     Double calorieGoal;
     Double calorieProgress;
+    int stepGoal;
+    int stepProgress;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,10 +60,15 @@ public class HomeFragment extends Fragment {
         if (user != null){
             calorieGoal = db.getCalorieGoal(user.getUserId());
             calorieProgress = user.getCalorieProgress();
+        } else {
+            calorieGoal = 2000.0;
+            calorieProgress = 1400.0;
         }
 
-        int stepGoal = 6000;
-        int stepProgress = 1300;
+        stepGoal = 6000;
+        stepProgress = 1300;
+
+        Log.d("calorie goals home", String.valueOf(calorieGoal));
 
         calorieProgressIndicator.setMax(calorieGoal.intValue());
         calorieProgressIndicator.setProgress(calorieProgress.intValue(),true);
@@ -71,6 +81,33 @@ public class HomeFragment extends Fragment {
 
         TextView stepText = binding.stepCount;
         stepText.setText(String.format("%s / %s", stepProgress, stepGoal));
+
+        Button addCalorieBtn = binding.calorieAddBtn;
+        Button addStepBtn = binding.stepAddBtn;
+
+        EditText calorieEditText = binding.editCalorie;
+        EditText stepEditText = binding.editSteps;
+
+        addCalorieBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Double caloriesAdded = Double.valueOf(calorieEditText.getText().toString());
+                calorieProgress += caloriesAdded;
+
+                calorieText.setText(String.format("%s / %s", calorieProgress, calorieGoal));
+                calorieProgressIndicator.setProgress(calorieProgress.intValue(),true);
+            }
+        });
+
+        addStepBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Double stepsAdded = Double.valueOf(calorieEditText.getText().toString());
+                stepProgress += stepsAdded;
+
+                stepProgressIndicator.setProgress(stepProgress, true);
+            }
+        });
 
         return root;
     }
