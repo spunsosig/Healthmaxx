@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.example.healthmaxx.Models.Food;
 import com.example.healthmaxx.Models.FoodNutrient;
+import com.example.healthmaxx.Models.Quote;
 import com.example.healthmaxx.Models.User;
 import com.example.healthmaxx.R;
 import com.example.healthmaxx.api.RequestFood;
@@ -29,7 +30,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private Context context;
     private static final String DATABASE_NAME = "healthmaxx.db";
-    private static final int VERSION = 8;
+    private static final int VERSION = 9;
 
     // USER TABLE
     private static final String TABLE_NAME = "users";
@@ -50,6 +51,11 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_MEALTIME = "meal_time";
     private static final String COLUMN_DATE = "date";
 
+    // TABLE STORING MOTIVATIONAL QUOTES
+    private static final String TABLE_NAME3 = "quotes";
+    private static final String COLUMN_ID3 = "quotes";
+    private static final String COLUMN_QUOTE = "quote";
+    private static final String COLUMN_AUTHOR = "author";
 
     public DBHandler(@Nullable Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -78,8 +84,14 @@ public class DBHandler extends SQLiteOpenHelper {
                 "CONSTRAINT FK_User_id FOREIGN KEY (" + COLUMN_USERID + ") " +
                 "REFERENCES " + TABLE_NAME + "(" + COLUMN_ID + "))";
 
+        String query3 = "CREATE TABLE " + TABLE_NAME3 +
+                " (" + COLUMN_ID3 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_QUOTE + " TEXT, " +
+                COLUMN_AUTHOR + " TEXT)";
+
         db.execSQL(query);
         db.execSQL(query2);
+        db.execSQL(query3);
 
     }
 
@@ -323,14 +335,41 @@ public class DBHandler extends SQLiteOpenHelper {
         return calories;
     }
 
+    public List<Quote> getQuotes(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        String query3 = " SELECT * FROM " + TABLE_NAME3;
+
+        cursor = db.rawQuery(query3, null);
+        List<Quote> quotes = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            String quoteText = cursor.getString(cursor.getColumnIndex(COLUMN_QUOTE));
+            String authorName = cursor.getString(cursor.getColumnIndex(COLUMN_AUTHOR));
+            Quote quote = new Quote(quoteText, authorName);
+            quotes.add(quote);
+        }
+
+        cursor.close();
+
+        for (Quote quote: quotes){
+            Log.d("DBHANDLER QUOTES", quote.getQuote() + " - " + quote.getAuthor());
+        }
+        return quotes;
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 //        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 
-        if (oldVersion < 8) {
-            String alterQuery = "ALTER TABLE " + TABLE_NAME2 +
-                    " ADD COLUMN " + COLUMN_CALORIES + " DOUBLE"; // Define new column
-            db.execSQL(alterQuery);
+        if (oldVersion < 9) {
+            String query3 = "CREATE TABLE " + TABLE_NAME3 +
+                    " (" + COLUMN_ID3 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_QUOTE + " TEXT, " +
+                    COLUMN_AUTHOR + " TEXT)";
+
+            db.execSQL(query3);
         }
     }
 

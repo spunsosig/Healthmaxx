@@ -20,10 +20,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthmaxx.DB.DBHandler;
+import com.example.healthmaxx.Models.Quote;
 import com.example.healthmaxx.Models.User;
 import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.databinding.FragmentHomeBinding;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+
+import java.util.List;
 
 public class HomeFragment extends Fragment implements SensorEventListener {
 
@@ -110,6 +113,12 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                 calorieProgressIndicator.setProgress(calorieProgress.intValue(),true);
             }
         });
+
+        List<Quote> quotes = db.getQuotes();
+
+        for (Quote quote: quotes){
+            Log.d("Quotes", quote.getQuote() + " - " + quote.getAuthor());
+        }
 
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         
