@@ -75,6 +75,8 @@
 
             <EditText
                 android:id="@+id/editCalorie"
+                android:textColorHint="#9E9E9E"
+                android:textColor="@color/purple_200"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:hint="kcal"
@@ -145,6 +147,8 @@
 
             <EditText
                 android:id="@+id/editSteps"
+                android:textColor="@color/purple_200"
+                android:textColorHint="#9E9E9E"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:hint="steps"

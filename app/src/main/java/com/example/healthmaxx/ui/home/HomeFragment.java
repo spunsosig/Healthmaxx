@@ -1,5 +1,10 @@
 package com.example.healthmaxx.ui.home;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -19,14 +25,22 @@ import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.databinding.FragmentHomeBinding;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SensorEventListener {
 
     private FragmentHomeBinding binding;
     boolean toggle = false;
     Double calorieGoal;
     Double calorieProgress;
+    TextView stepText;
+    float totalSteps;
     int stepGoal;
     int stepProgress;
+
+    SensorManager sensorManager;
+    Sensor stepSensor;
+    
+    Boolean running = false;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,14 +73,11 @@ public class HomeFragment extends Fragment {
 
         if (user != null){
             calorieGoal = db.getCalorieGoal(user.getUserId());
-            calorieProgress = user.getCalorieProgress();
+            calorieProgress = db.getCalories(user.getUserId());
         } else {
             calorieGoal = 2000.0;
             calorieProgress = 1400.0;
         }
-
-        stepGoal = 6000;
-        stepProgress = 1300;
 
         Log.d("calorie goals home", String.valueOf(calorieGoal));
 
@@ -79,14 +90,15 @@ public class HomeFragment extends Fragment {
         TextView calorieText = binding.calorieCount;
         calorieText.setText(String.format("%s / %s", calorieProgress, calorieGoal));
 
-        TextView stepText = binding.stepCount;
+        stepGoal = 6000;
+        stepProgress = 0;
+
+        stepText = binding.stepCount;
         stepText.setText(String.format("%s / %s", stepProgress, stepGoal));
 
         Button addCalorieBtn = binding.calorieAddBtn;
-        Button addStepBtn = binding.stepAddBtn;
 
         EditText calorieEditText = binding.editCalorie;
-        EditText stepEditText = binding.editSteps;
 
         addCalorieBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,22 +111,72 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        addStepBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Double stepsAdded = Double.valueOf(calorieEditText.getText().toString());
-                stepProgress += stepsAdded;
-
-                stepProgressIndicator.setProgress(stepProgress, true);
-            }
-        });
-
+        sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+        
         return root;
+    }
+
+    @Override
+    public void onResume(){
+        Log.d("ONRESUME", "is being called");
+
+        super.onResume();
+        running = true;
+
+        stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        boolean hasStepDetector = stepSensor != null;
+
+        if (hasStepDetector){
+            Log.d("stepdetector", "connected successfully");
+        } else {
+            Log.d("stepdetector", "not found");
+        }
+
+        if (stepSensor != null){
+            sensorManager.registerListener(this,  stepSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        } else {
+            Toast.makeText(this.getContext(), "No sensor detected on this device", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (running) {
+            totalSteps = event.values[0];
+
+            int currentSteps = (int) totalSteps + stepProgress;
+
+            stepProgress = currentSteps;
+
+            stepText.setText(String.format("%s / %s", currentSteps, stepGoal));
+
+            Log.d("STEPCOUNTER", "total: " + String.valueOf(totalSteps));
+            Log.d("STEPCOUNTER", "stepProgress: " + String.valueOf(stepProgress));
+            Log.d("STEPCOUNTER", "currentSteps: " + String.valueOf(currentSteps));
+
+            CircularProgressIndicator stepProgressIndicator = binding.stepProgressIndicator;
+//            stepProgressIndicator.setProgress(currentSteps, true);
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    stepProgressIndicator.setMax(6000);
+                    stepProgressIndicator.setProgress(currentSteps);
+                }
+            });
+
+            Log.d("stepProgressindicator", String.valueOf(stepProgressIndicator.getProgress() + " currentSteps " + currentSteps));
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }

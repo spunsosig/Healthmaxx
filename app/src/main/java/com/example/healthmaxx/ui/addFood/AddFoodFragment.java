@@ -25,6 +25,7 @@ import com.example.healthmaxx.R;
 import com.example.healthmaxx.api.RequestFood;
 import com.example.healthmaxx.databinding.FragmentAddFoodBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -109,7 +110,8 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
                     if (response.isSuccessful()) {
                         if (response.body() != null && response.body().getFoods() != null){
                             List<Food> foods = response.body().getFoods();
-                            AddFoodAdapter addFoodAdapter = new AddFoodAdapter(requireContext(), foods);
+                            List<Food> sortedFoods = sortFoods(foods);
+                            AddFoodAdapter addFoodAdapter = new AddFoodAdapter(requireContext(), sortedFoods);
                             recyclerView.setAdapter(addFoodAdapter);
                         } else {
                             Log.e("API", "Item is null");
@@ -128,5 +130,24 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
                 }
             });
         }
+    }
+
+    private List<Food> sortFoods(List<Food> foods) {
+        List<Food> foodsWithCalories = new ArrayList<>();
+        List<Food> foodsWithoutCalories = new ArrayList<>();
+
+        for (Food food: foods){
+            if (food.getLabelNutrients() != null && food.getLabelNutrients().getCalories() != null) {
+                foodsWithCalories.add(food);
+            } else {
+                foodsWithoutCalories.add(food);
+            }
+        }
+
+        List<Food> sortedFoods = new ArrayList<>();
+        sortedFoods.addAll(foodsWithCalories);
+        sortedFoods.addAll(foodsWithoutCalories);
+
+        return sortedFoods;
     }
 }

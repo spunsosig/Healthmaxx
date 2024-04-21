@@ -29,7 +29,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private Context context;
     private static final String DATABASE_NAME = "healthmaxx.db";
-    private static final int VERSION = 7;
+    private static final int VERSION = 8;
 
     // USER TABLE
     private static final String TABLE_NAME = "users";
@@ -44,6 +44,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ID2 = "id";
     private static final String COLUMN_USERID = "user_id";
     private static final String COLUMN_FDCID = "fdc_id";
+    private static final String COLUMN_CALORIES = "calories";
     private static final String COLUMN_DESCRIPTION = "description";
     private static final String COLUMN_SERVINGSIZE = "serving_size";
     private static final String COLUMN_MEALTIME = "meal_time";
@@ -70,6 +71,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 COLUMN_USERID + " INTEGER, " +
                 COLUMN_FDCID + " INTEGER, " +
                 COLUMN_DESCRIPTION + " TEXT, " +
+                COLUMN_CALORIES + " DOUBLE " +
                 COLUMN_SERVINGSIZE + " FLOAT, " +
                 COLUMN_MEALTIME + " STRING " +
                 COLUMN_DATE + " DATE DEFAULT CURRENT_TIMESTAMP, " +
@@ -99,7 +101,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void addItem(int userId, int fdcId, float servingSize, String mealTime, String description){
+    public void addItem(int userId, int fdcId, float servingSize, String mealTime, String description, Double calories){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -108,7 +110,9 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(COLUMN_SERVINGSIZE, servingSize);
         cv.put(COLUMN_MEALTIME, mealTime);
         cv.put(COLUMN_DESCRIPTION, description);
-
+        if (calories != null){
+            cv.put(COLUMN_CALORIES, calories);
+        }
 
         long result = db.insert(TABLE_NAME2, null, cv);
 
@@ -294,13 +298,38 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
+    public Double getCalories (int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        Double calories = 0.0;
+
+        String query = " SELECT " + COLUMN_CALORIES + " FROM " + TABLE_NAME2
+                + " WHERE " + COLUMN_USERID + " = " + id
+                + " AND " + COLUMN_CALORIES + " IS NOT NULL";
+
+        cursor = db.rawQuery(query, null);
+
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    calories += cursor.getDouble(cursor.getColumnIndex(COLUMN_CALORIES));
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return calories;
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 //        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 
-        if (oldVersion < 7) {
-            String alterQuery = "ALTER TABLE " + TABLE_NAME +
-                    " ADD COLUMN " + COLUMN_CALORIEGOAL + " DOUBLE"; // Define new column
+        if (oldVersion < 8) {
+            String alterQuery = "ALTER TABLE " + TABLE_NAME2 +
+                    " ADD COLUMN " + COLUMN_CALORIES + " DOUBLE"; // Define new column
             db.execSQL(alterQuery);
         }
     }

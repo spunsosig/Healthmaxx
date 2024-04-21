@@ -5,6 +5,8 @@ import static android.app.PendingIntent.getActivity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +29,8 @@ import com.example.healthmaxx.databinding.ActivityMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.app.Fragment;
 
+import java.util.Objects;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -47,6 +51,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (currentUser != null){
             Log.d("USER ID ", String.valueOf(currentUser.getUserId()));
         }
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.healthmaxxing);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.c2)));
 
         Animation rotateOpen = AnimationUtils.loadAnimation(this,R.anim.rotate_open_anim);
         Animation rotateClose = AnimationUtils.loadAnimation(this,R.anim.rotate_close_anim);

@@ -23,20 +23,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.healthmaxx.DB.DBHandler;
 import com.example.healthmaxx.Models.Food;
+import com.example.healthmaxx.Models.LabelNutrients;
 import com.example.healthmaxx.Models.User;
 import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.R;
+import com.example.healthmaxx.api.RequestFood;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHolder> {
     private List<Food> foods;
     private Context context;
     private User currentUser;
+    RequestFood requestFood;
+    List<Food> foodWithCalories;
+    Food food;
+    List<Integer> foodIds;
+    int foodId;
+    Double calories;
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView foodName;
 
         public ViewHolder(View itemView) {
@@ -46,13 +59,13 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
             foodName.setOnClickListener(this);
         }
 
-        public TextView getFoodName(){
+        public TextView getFoodName() {
             return foodName;
         }
 
         @Override
         public void onClick(View v) {
-            if (v.getId() == foodName.getId()){
+            if (v.getId() == foodName.getId()) {
                 Log.d("SELECTED", foodName.getText().toString() + " " + getAdapterPosition());
                 Food selectedFood = foods.get(getAdapterPosition());
 
@@ -69,14 +82,17 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
                 TextView foodTitle = dialogView.findViewById(R.id.foodName);
 
                 // Set values to views
-                foodTitle.setText(selectedFood.getDescription());
+                foodTitle.setText(selectedFood.getDescription() + " : ");
+
+                if (selectedFood.getLabelNutrients() != null && selectedFood.getLabelNutrients().getCalories() != null) {
+                    foodTitle.setText(selectedFood.getDescription() + String.valueOf(selectedFood.getLabelNutrients().getCalories().getValue()));
+                }
 
                 // Create and set up the adapter for the spinner
                 List<String> mealTimes = Arrays.asList("Breakfast", "Lunch", "Dinner", "Snacks");
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(itemView.getContext(), R.layout.spinner_item, mealTimes);
                 arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
                 mealTimeSpinner.setAdapter(arrayAdapter);
-
 
                 // Set positive button
                 builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
@@ -89,8 +105,33 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
 
                         User user = UserManager.getInstance().getCurrentUser();
 
-                        dbHandler.addItem(user.getUserId(), fdcId, servingSize, mealtime, selectedFood.getDescription());
-                        dialog.dismiss(); // Dismiss the dialog
+                        Retrofit retrofit = com.example.cinemaapp2.api.ApiClient.getClient();
+                        requestFood = retrofit.create(RequestFood.class);
+
+                        Call<Food> foodCall = requestFood.findFoodById(context.getResources().getString(R.string.api_key), foodId);
+
+                        foodCall.enqueue(new Callback<Food>() {
+                            @Override
+                            public void onResponse(Call<Food> call, Response<Food> response) {
+                                Log.d("FOOD ADAPTER", "API SUCCESS 2 ");
+                                if (response.body().getLabelNutrients() != null && response.body().getLabelNutrients().getCalories() != null) {
+                                    Food food = response.body();
+                                    calories = food.getLabelNutrients().getCalories().getValue();
+
+                                } else {
+                                    calories = null;
+                                }
+                                dbHandler.addItem(user.getUserId(), fdcId, servingSize, mealtime, selectedFood.getDescription(), calories);
+                                dialog.dismiss(); // Dismiss the dialog
+                            }
+
+                            @Override
+                            public void onFailure(Call<Food> call, Throwable t) {
+                                Log.e("FOOD ADAPTER", "API FAILUIRE 2 ", t);
+                                dbHandler.addItem(user.getUserId(), fdcId, servingSize, mealtime, selectedFood.getDescription(), calories);
+                                dialog.dismiss(); // Dismiss the dialog
+                            }
+                        });
                     }
                 });
 
@@ -125,8 +166,48 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull AddFoodAdapter.ViewHolder holder, int position) {
-        holder.getFoodName().setText(foods.get(position).getDescription());
+
+        foodId = foods.get(position).getFdcId();
+
+        Retrofit retrofit = com.example.cinemaapp2.api.ApiClient.getClient();
+        requestFood = retrofit.create(RequestFood.class);
+
+        Call<Food> foodCall = requestFood.findFoodById(context.getResources().getString(R.string.api_key), foodId);
+        foodCall.enqueue(new Callback<Food>() {
+            @Override
+            public void onResponse(Call<Food> call, Response<Food> response) {
+                food = response.body();
+                LabelNutrients labelNutrients = food.getLabelNutrients();
+
+                Log.d("FOODADAPTERAPI", food.getDescription());
+                if (labelNutrients != null && labelNutrients.getCalories() != null) {
+                    Log.d("FOODADAPTERAPI", String.valueOf(labelNutrients.getCalories().getValue()));
+
+                    holder.getFoodName().setText(food.getDescription() + " : " + food.getLabelNutrients().getCalories().getValue() + "kcal");
+                } else {
+                    Log.d("FOODADAPTERAPI", "label nutrients null for : " + food.getDescription());
+
+                    holder.getFoodName().setText(food.getDescription());
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Food> call, Throwable t) {
+                Log.e("FOODADAPTER", "api failure", t);
+            }
+        });
+
+
+//        if (food.getLabelNutrients() != null && food.getLabelNutrients().getCalories() != null){
+//            Log.d("calories ", food.getDescription() + " : " + food.getLabelNutrients().getCalories().getValue());
+//            holder.getFoodName().setText(food.getDescription() + " : " + food.getLabelNutrients().getCalories().getValue() + "kcal");
+//        } else {
+//            holder.getFoodName().setText(food.getDescription() + " kcal not found ");
+//        }
     }
+
 
     @Override
     public int getItemCount() {
