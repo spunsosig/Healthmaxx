@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.healthmaxx.DB.DBHandler;
 import com.example.healthmaxx.Models.Quote;
@@ -26,6 +27,7 @@ import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.databinding.FragmentHomeBinding;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements SensorEventListener {
@@ -114,11 +116,19 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             }
         });
 
-        List<Quote> quotes = db.getQuotes();
+//        List<Quote> quotes = db.getQuotes();
 
-        for (Quote quote: quotes){
-            Log.d("Quotes", quote.getQuote() + " - " + quote.getAuthor());
-        }
+        List<Quote> quotes = new ArrayList<>();
+
+        quotes.add(new Quote("If you don’t find the time, if you don’t do the work, you don’t get the results.", "Arnold Schwarzenegger"));
+        quotes.add(new Quote("I’ve failed over and over again in my life and that is why I succeed.", "Michael Jordan"));
+        quotes.add(new Quote("If you don’t find the time, if you don’t do the work, you don’t get the results.", "Arnold Schwarzenegger"));
+        quotes.add(new Quote("Sometimes, carrying on, just carrying on, is the superhuman achievement.", "Albert Camus"));
+        quotes.add(new Quote("The successful warrior is the average man with laser-like focus.", "Bruce Lee"));
+
+        ViewPager2 viewPager = binding.viewPager;
+        QuotePagerAdapter adapter = new QuotePagerAdapter(quotes);
+        viewPager.setAdapter(adapter);
 
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         

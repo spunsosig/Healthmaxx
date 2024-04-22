@@ -1,5 +1,6 @@
 package com.example.healthmaxx.Login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -35,6 +36,7 @@ public class RegisterFragment extends Fragment {
     private EditText confirmPasswordEditText;
     private EditText emailEditText;
     private EditText nameEditText;
+    Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        context = getContext();
 
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -84,17 +88,31 @@ public class RegisterFragment extends Fragment {
 
         if (isSecure(password, confirmPassword, email)){
             DBHandler db = new DBHandler(getContext());
-            db.addUser(email, password, name);
+
+            long result = db.addUser(email, password, name, context);
+
+            if (result == -1){
+                Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
+            }
 
             User user = db.getUser(email);
+            if (user != null){
+                Log.d("REGISTER FRAGMENT 1", "CURRENT USER " + user.getEmail());
+            } else {
+                Log.d("REGISTER FRAGMENT 1", "USER IS NULL ");
+
+            }
             UserManager.getInstance().setCurrentUser(user);
+            if (UserManager.getInstance().getCurrentUser() != null){
+                Log.d("REGISTER FRAGMENT 2", "CURRENT USER " + UserManager.getInstance().getCurrentUser().getName());
+            } else {
+                Log.d("REGISTER FRAGMENT 2", "CURRENT USER null");
+
+            }
 
             User currentUser = UserManager.getInstance().getCurrentUser();
-
-//            Log.d("USER", " " + currentUser.getEmail());
-
-//            Intent intent = new Intent(getActivity(), MainActivity.class);
-//            startActivity(intent);
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.registerFragmentContainer, new CalculateBMR()).commit();
         }

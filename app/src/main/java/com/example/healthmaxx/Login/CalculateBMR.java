@@ -51,8 +51,8 @@ public class CalculateBMR extends Fragment {
                 Log.d("BMR", "weight: " + weightForm.getText());
                 Log.d("BMR", "age: " + ageForm.getText());
 
-                int weight = Integer.parseInt(weightForm.getText().toString());
-                int height = Integer.parseInt(heightForm.getText().toString());
+                Double weight = Double.valueOf(weightForm.getText().toString());
+                Double height = Double.valueOf(heightForm.getText().toString());
                 int age = Integer.parseInt(ageForm.getText().toString());
 
                 RadioButton r = root.findViewById(radioGroup.getCheckedRadioButtonId());
@@ -76,22 +76,17 @@ public class CalculateBMR extends Fragment {
                     activityMultiplier = 1.9;
                 }
 
-                // Mifflin-St Jeor Equation to calculate BMR
+                String gender = r.getText().toString();
 
-                if (r.getText().equals("Male")){
-                    BMR = (10 * weight) + (6.25 * height) - (5 * age) + 5;
-                    calorieGoal = BMR * activityMultiplier;
-                } else {
-                    BMR = (10 * weight) + (6.25 * height) - (5 * age) - 161;
-                    calorieGoal = BMR * activityMultiplier;
+                Double bmr = calculateBMR(height, weight, age, gender);
+                calorieGoal = bmr * activityMultiplier;
 
-                }
-
-                Log.d("BMR", "BMR: " + BMR);
+                Log.d("BMR", "BMR: " + bmr);
                 Log.d("calorieGoal", "Calories: " + calorieGoal);
 
                 User user = UserManager.getInstance().getCurrentUser();
-                user.setBMR(BMR);
+
+                user.setBMR(bmr);
                 user.setCalorieGoal(calorieGoal);
 
                 DBHandler db = new DBHandler(getContext());
@@ -103,5 +98,17 @@ public class CalculateBMR extends Fragment {
         });
 
         return root;
+    }
+
+    public Double calculateBMR(Double height, Double weight, int age, String gender) {
+
+        // Mifflin-St Jeor Equation to calculate BMR
+        if (gender.equals("Male")){
+            BMR = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+        } else {
+            BMR = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+        }
+
+        return BMR;
     }
 }

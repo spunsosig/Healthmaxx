@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#246D9E"
+    android:layout_margin="24sp"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/quoteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="150sp"
+        android:fontFamily="@font/alegreya"
+        android:gravity="center"
+        android:padding="24sp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/authorTextView"
+        android:layout_width="match_parent"
+        android:layout_height="75sp"
+        android:fontFamily="@font/alegreya"
+        android:gravity="center"
+        android:padding="8dp"
+        android:paddingBottom="24sp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quoteTextView" />
+
+    <LinearLayout
+        android:padding="8sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/authorTextView">
+
+        <View
+            android:layout_width="14sp"
+            android:layout_height="14sp"
+            android:backgroundTint="#424242"
+            android:background="@drawable/circle"
+            android:layout_marginRight="4sp"/>
+
+        <View
+            android:layout_width="14sp"
+            android:layout_height="14sp"
+            android:layout_marginRight="4sp"
+            android:background="@drawable/circle"/>
+
+        <View
+            android:layout_width="14sp"
+            android:layout_height="14sp"
+            android:layout_marginRight="4sp"
+            android:background="@drawable/circle"/>
+
+        <View
+            android:layout_width="14sp"
+            android:layout_height="14sp"
+            android:layout_marginRight="4sp"
+            android:background="@drawable/circle"/>
+
+        <View
+            android:layout_width="14sp"
+            android:layout_height="14sp"
+            android:layout_marginRight="4sp"
+            android:background="@drawable/circle"/>
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

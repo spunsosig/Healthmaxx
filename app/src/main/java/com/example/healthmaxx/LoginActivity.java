@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean isSecurePassword(String pass){
+    public static boolean isSecurePassword(String pass){
         String regex = "^(?=.*[0-9])(?=.*[A-Z]).{8,}$";
 
         Pattern pattern = Pattern.compile(regex);

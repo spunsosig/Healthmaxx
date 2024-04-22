@@ -14,6 +14,7 @@ import com.example.healthmaxx.Models.Food;
 import com.example.healthmaxx.Models.FoodNutrient;
 import com.example.healthmaxx.Models.Quote;
 import com.example.healthmaxx.Models.User;
+import com.example.healthmaxx.Models.UserManager;
 import com.example.healthmaxx.R;
 import com.example.healthmaxx.api.RequestFood;
 
@@ -63,6 +64,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    public DBHandler(@Nullable Context context, String DBName){
+        super(context, DBName, null, VERSION);
+        this.context = context;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME +
@@ -95,8 +101,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public void addUser(String email, String password, String name) {
-
+    public long addUser(String email, String password, String name, Context context) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -104,35 +109,37 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(COLUMN_PASSWORD, password);
         cv.put(COLUMN_NAME, name);
 
-        long result = db.insert(TABLE_NAME, null, cv);
+        long result = -1; // Default value for insertion failure
 
-        if (result == -1){
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
+        try {
+            result = db.insert(TABLE_NAME, null, cv);
+            if (result == -1) {
+                Log.e("DBHandler", "User insertion failed");
+            } else {
+                Log.d("DBHandler", "User inserted successfully");
+            }
+        } catch (Exception e) {
+            Log.e("DBHandler", "Error inserting user: " + e.getMessage());
+        } finally {
+            db.close();
         }
+
+        return result;
     }
 
-    public void addItem(int userId, int fdcId, float servingSize, String mealTime, String description, Double calories){
+    public long addItem(int userId, int fdcId, float servingSize, String mealTime, String description, Double calories){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_USERID, userId);
         cv.put(COLUMN_FDCID, fdcId);
-        cv.put(COLUMN_SERVINGSIZE, servingSize);
         cv.put(COLUMN_MEALTIME, mealTime);
         cv.put(COLUMN_DESCRIPTION, description);
         if (calories != null){
             cv.put(COLUMN_CALORIES, calories);
         }
 
-        long result = db.insert(TABLE_NAME2, null, cv);
-
-        if (result == -1){
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
-        }
+        return db.insert(TABLE_NAME2, null, cv);
 
     }
 
@@ -143,15 +150,23 @@ public class DBHandler extends SQLiteOpenHelper {
         int userId = -1; // Default value indicating user ID not found or error
 
         try {
-            String query = "SELECT " + COLUMN_ID + ", " + COLUMN_NAME + " FROM " + TABLE_NAME +
+            String query = "SELECT " + COLUMN_ID + ", " + COLUMN_NAME + ", " + COLUMN_PASSWORD + " FROM " + TABLE_NAME +
                     " WHERE " + COLUMN_EMAIL + " = ?";
             cursor = db.rawQuery(query, new String[]{email});
 
             if (cursor.moveToFirst()) {
                 userId = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                 userName = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
-                Log.d("CURSOR", userName);
-                return new User(userId, email, userName);
+                String password = cursor.getString(cursor.getColumnIndex(COLUMN_PASSWORD));
+                User user = new User(userId, email, userName, password);
+                Log.d("CURSOR USER", "id : " + user.getUserId());
+                Log.d("CURSOR USER", user.getName());
+                Log.d("CURSOR USER", user.getEmail());
+                Log.d("CURSOR USER", user.getPassword());
+
+
+                UserManager.getInstance().setCurrentUser(user);
+                return user;
             }
         } catch (Exception e) {
             // Handle exceptions, logging, or other error handling as needed

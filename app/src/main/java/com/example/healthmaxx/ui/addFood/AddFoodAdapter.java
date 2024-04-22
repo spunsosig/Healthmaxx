@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -22,6 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.healthmaxx.DB.DBHandler;
+import com.example.healthmaxx.MainActivity;
 import com.example.healthmaxx.Models.Food;
 import com.example.healthmaxx.Models.LabelNutrients;
 import com.example.healthmaxx.Models.User;
@@ -121,14 +123,28 @@ public class AddFoodAdapter extends RecyclerView.Adapter<AddFoodAdapter.ViewHold
                                 } else {
                                     calories = null;
                                 }
-                                dbHandler.addItem(user.getUserId(), fdcId, servingSize, mealtime, selectedFood.getDescription(), calories);
+                                long result = dbHandler.addItem(user.getUserId(), fdcId, servingSize, mealtime, selectedFood.getDescription(), calories);
+
+                                if (result != -1) {
+                                    Toast.makeText(context, "could not add to database", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(context, "Added item successfully!", Toast.LENGTH_LONG).show();
+                                }
+
                                 dialog.dismiss(); // Dismiss the dialog
                             }
 
                             @Override
                             public void onFailure(Call<Food> call, Throwable t) {
                                 Log.e("FOOD ADAPTER", "API FAILUIRE 2 ", t);
-                                dbHandler.addItem(user.getUserId(), fdcId, servingSize, mealtime, selectedFood.getDescription(), calories);
+                                long result = dbHandler.addItem(user.getUserId(), fdcId, servingSize, mealtime, selectedFood.getDescription(), calories);
+
+                                if (result != -1) {
+                                    Toast.makeText(context, "could not add to database", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(context, "Added item successfully!", Toast.LENGTH_LONG).show();
+                                }
+
                                 dialog.dismiss(); // Dismiss the dialog
                             }
                         });
